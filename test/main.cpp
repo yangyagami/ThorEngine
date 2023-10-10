@@ -1,6 +1,8 @@
 #include <iostream>
 
-int main() {
-	std::cout << "Hello Thor" << std::endl;
-	return 0;
+#include "ThorEngine.h"
+
+int main(int argc, char *argv[]) {
+	Thor::Engine engine(argc, argv);
+	return engine.run();
 }
