@@ -1,22 +1,22 @@
-#include "OpenglVbo.h"
+#include "OpenglBuffer.h"
 
 namespace Thor {
 
-OpenglVbo::OpenglVbo(GLenum mode, GLsizeiptr dataSize, GLvoid *data, GLenum usage) : mMode(mode) {
-	glGenBuffers(1, &mVbo);
-	glBindBuffer(mMode, mVbo);
+OpenglBuffer::OpenglBuffer(GLenum mode, GLsizeiptr dataSize, GLvoid *data, GLenum usage) : mMode(mode) {
+	glGenBuffers(1, &mBuffer);
+	glBindBuffer(mMode, mBuffer);
 	glBufferData(mMode, dataSize, data, usage);
 }
 
-OpenglVbo::~OpenglVbo() {
-	glDeleteBuffers(1, &mVbo);
+OpenglBuffer::~OpenglBuffer() {
+	glDeleteBuffers(1, &mBuffer);
 }
 
-void OpenglVbo::bind() {
-	glBindBuffer(mMode, mVbo);
+void OpenglBuffer::bind() {
+	glBindBuffer(mMode, mBuffer);
 }
 
-void OpenglVbo::unbind() {
+void OpenglBuffer::unbind() {
 	glBindBuffer(mMode, 0);
 }
 

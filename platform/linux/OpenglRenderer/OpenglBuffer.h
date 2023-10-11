@@ -5,13 +5,13 @@
 
 namespace Thor {
 
-class OpenglVbo {
+class OpenglBuffer {
 private:
 	GLenum mMode;
-	unsigned int mVbo;
+	unsigned int mBuffer;
 public:
-	OpenglVbo(GLenum mode, GLsizeiptr dataSize, GLvoid *data, GLenum usage);	
-	~OpenglVbo();	
+	OpenglBuffer(GLenum mode, GLsizeiptr dataSize, GLvoid *data, GLenum usage);	
+	~OpenglBuffer();	
 	void bind();
 	void unbind();
 };
