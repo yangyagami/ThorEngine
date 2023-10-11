@@ -1,6 +1,9 @@
 #include "ThorEngine.h"
 #include "spdlog/spdlog.h"
 #include "glad/glad.h"
+#include "OpenglVao.h"
+#include "OpenglVbo.h"
+#include "OpenglShader.h"
 
 namespace Thor {
 	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv) {
@@ -13,6 +16,7 @@ namespace Thor {
 			return false;
 		}	
 		spdlog::info("Engine init success.");
+
 		return true;
 	}
 
