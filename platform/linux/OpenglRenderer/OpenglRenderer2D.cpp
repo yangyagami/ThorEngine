@@ -1,19 +1,19 @@
-#include "Renderer.h"
+#include "OpenglRenderer2D.h"
 #include "spdlog/spdlog.h"
 #include "glad/glad.h"
 
 namespace Thor {
-	Renderer::Renderer() : mVao(nullptr), mVbo(nullptr), mEbo(nullptr), mShader(nullptr) {
+	OpenglRenderer2D::OpenglRenderer2D() : mVao(nullptr), mVbo(nullptr), mEbo(nullptr), mShader(nullptr) {
 	
 	}
 	
-	Renderer::~Renderer() {
+	OpenglRenderer2D::~OpenglRenderer2D() {
 		delete[] mVertices;	
 		delete[] mIndices;	
 	}
 	
-	bool Renderer::init() {
-		spdlog::info("Renderer init success");	
+	bool OpenglRenderer2D::init() {
+		spdlog::info("OpenglRenderer2D init success");	
 		mCurrentIndicesIndex = mCurrentVerticesIndex = 0;	
 
 		mVertices = new float[RENDERER_MAX_VERTEX];
@@ -47,24 +47,24 @@ void main()
 		return true;	
 	}
 
-	void Renderer::fflush() {
+	void OpenglRenderer2D::fflush() {
 		mVbo->update(0, mCurrentVerticesIndex * sizeof(float), mVertices);
 		mEbo->update(0, mCurrentIndicesIndex * sizeof(unsigned int), mIndices);
 		glDrawElements(GL_TRIANGLES, mCurrentIndicesIndex, GL_UNSIGNED_INT, 0);
 	}
 	
-	void Renderer::beginBatch() {
+	void OpenglRenderer2D::beginBatch() {
 		glClear(GL_COLOR_BUFFER_BIT);	
 		glClearColor(0.2f, 0.0f, 0.0f, 1.0f);	
 	}
 	
-	void Renderer::endBatch() {
+	void OpenglRenderer2D::endBatch() {
 		if (mCurrentIndicesIndex == 0 || mCurrentVerticesIndex == 0) return;
 		fflush();
 		mCurrentVerticesIndex = mCurrentIndicesIndex = 0;
 	}
 	
-	void Renderer::drawRectangle(const Vec2 &pos, const Vec2 &size, const Vec4 &color) {
+	void OpenglRenderer2D::drawRectangle(const Vec2 &pos, const Vec2 &size, const Vec4 &color) {
 		if (mCurrentVerticesIndex >= RENDERER_MAX_VERTEX || mCurrentIndicesIndex >= RENDERER_MAX_INDICES) {
 			mCurrentVerticesIndex = 0;
 			mCurrentIndicesIndex = 0;
@@ -92,7 +92,7 @@ void main()
 	}
 
 
-	void Renderer::drawTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const Vec4 &color) {
+	void OpenglRenderer2D::drawTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const Vec4 &color) {
 		if (mCurrentVerticesIndex >= RENDERER_MAX_VERTEX || mCurrentIndicesIndex >= RENDERER_MAX_INDICES) {
 			mCurrentVerticesIndex = 0;
 			mCurrentIndicesIndex = 0;
@@ -113,7 +113,7 @@ void main()
 		mVertices[mCurrentVerticesIndex++] = c.y;	
 	}
 	
-	void Renderer::drawCircle(const Vec2 &pos, float radius, const Vec4 &color, int count) {
+	void OpenglRenderer2D::drawCircle(const Vec2 &pos, float radius, const Vec4 &color, int count) {
 		if (mCurrentVerticesIndex >= RENDERER_MAX_VERTEX || mCurrentIndicesIndex >= RENDERER_MAX_INDICES) {
 			mCurrentVerticesIndex = 0;
 			mCurrentIndicesIndex = 0;

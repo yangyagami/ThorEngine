@@ -1,13 +1,15 @@
 #ifndef THOR_ENGINE_H
 #define THOR_ENGINE_H
 
+#include <memory>
+
 #include "Application.h"
-#include "Renderer.h"
+#include "Renderer2D.h"
 
 namespace Thor {
 	class Engine {
 	private:
-		Renderer mRenderer;
+		std::unique_ptr<Renderer2D> mRenderer;
 		Application mApp;
 	private:
 		void update();

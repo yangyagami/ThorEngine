@@ -1,9 +1,10 @@
-#ifndef THOR_RENDERER_H
-#define THOR_RENDERER_H
+#ifndef THOR_OPENGL_RENDERER_2D_H
+#define THOR_OPENGL_RENDERER_2D_H
 
 #include <memory>
 #include <array>
 
+#include "Renderer2D.h"
 #include "Vec.hpp"
 #include "OpenglVao.h"
 #include "OpenglBuffer.h"
@@ -14,7 +15,7 @@
 #define RENDERER_MAX_INDICES (RENDERER_MAX_VERTEX * 6)
 
 namespace Thor {
-class Renderer {
+class OpenglRenderer2D : public Renderer2D {
 private:
 	int mCurrentVerticesIndex;
 	int mCurrentIndicesIndex;
@@ -25,11 +26,11 @@ private:
 	std::unique_ptr<OpenglBuffer> mVbo;	
 	std::unique_ptr<OpenglBuffer> mEbo;	
 	std::unique_ptr<OpenglShader> mShader;	
-private:
+public:
 	void fflush();
 public:
-	Renderer();
-	~Renderer();
+	OpenglRenderer2D();
+	~OpenglRenderer2D();
 	bool init();
 	void beginBatch();
 	void endBatch();
