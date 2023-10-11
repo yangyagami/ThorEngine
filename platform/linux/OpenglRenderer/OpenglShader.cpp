@@ -25,7 +25,7 @@ OpenglShader::OpenglShader(const std::string &vertexShaderSource, const std::str
 }
 
 OpenglShader::~OpenglShader() {
-
+	glDeleteProgram(mProgram);
 }
 
 unsigned int OpenglShader::createShader(GLenum shaderType, const std::string &source) {
@@ -50,7 +50,7 @@ void OpenglShader::bind() {
 }
 
 void OpenglShader::unbind() {
-
+	glUseProgram(0);
 }
 
 }

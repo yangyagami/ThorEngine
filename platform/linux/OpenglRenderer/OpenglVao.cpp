@@ -13,11 +13,11 @@ void OpenglVao::bind() {
 }
 
 void OpenglVao::unbind() {
-
+	glBindVertexArray(0);
 }
 
 OpenglVao::~OpenglVao() {
-
+	glDeleteVertexArrays(1, &mVao);
 }
 
 }

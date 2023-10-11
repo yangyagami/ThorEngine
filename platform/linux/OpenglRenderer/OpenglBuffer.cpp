@@ -9,6 +9,7 @@ OpenglVbo::OpenglVbo(GLenum mode, GLsizeiptr dataSize, GLvoid *data, GLenum usag
 }
 
 OpenglVbo::~OpenglVbo() {
+	glDeleteBuffers(1, &mVbo);
 }
 
 void OpenglVbo::bind() {
@@ -16,7 +17,7 @@ void OpenglVbo::bind() {
 }
 
 void OpenglVbo::unbind() {
-
+	glBindBuffer(mMode, 0);
 }
 
 }
