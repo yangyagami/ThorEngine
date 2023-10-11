@@ -27,11 +27,10 @@ namespace Thor {
 	}
 	
 	void Engine::render() {
-		for (int row = -20; row < 20; row++) {
-			for (int col = -20; col < 20; col++) {
-				mRenderer.drawRectangle(Vec2(col * 0.06f, row * 0.06f), Vec2(0.05f, 0.05f), Vec4(1.0f, 0.5f, 1.0f, 1.0f));
-			}
-		}
+		mRenderer.drawRectangle(Vec2(0.5f, 0.5f), Vec2(0.05f, 0.05f), Vec4(1.0f, 0.5f, 1.0f, 1.0f));
+		mRenderer.drawTriangle(Vec2(0.6f, 0.6f), Vec2(0.7f, 0.6f), Vec2(0.7f, 0.8f), Vec4(1.0f, 0.5f, 1.0f, 1.0f));
+		mRenderer.drawCircle(Vec2(0.0f, 0.0f), 0.3f, Vec4(1.0f, 0.5f, 1.0f, 1.0f), 36);
+		mRenderer.drawCircle(Vec2(-0.4f, -0.4f), 0.3f, Vec4(1.0f, 0.5f, 1.0f, 1.0f), 36);
 	}
 
 	int Engine::run() {

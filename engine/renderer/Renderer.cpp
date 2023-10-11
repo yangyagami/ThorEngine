@@ -91,4 +91,56 @@ void main()
 
 	}
 
+
+	void Renderer::drawTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const Vec4 &color) {
+		if (mCurrentVerticesIndex >= RENDERER_MAX_VERTEX || mCurrentIndicesIndex >= RENDERER_MAX_INDICES) {
+			mCurrentVerticesIndex = 0;
+			mCurrentIndicesIndex = 0;
+			fflush();
+		}
+
+		int currentPointCount = mCurrentVerticesIndex / 2;
+
+		mIndices[mCurrentIndicesIndex++] = currentPointCount + 0;	
+		mIndices[mCurrentIndicesIndex++] = currentPointCount + 1;	
+		mIndices[mCurrentIndicesIndex++] = currentPointCount + 2;	
+
+		mVertices[mCurrentVerticesIndex++] = a.x;	
+		mVertices[mCurrentVerticesIndex++] = a.y;	
+		mVertices[mCurrentVerticesIndex++] = b.x;	
+		mVertices[mCurrentVerticesIndex++] = b.y;	
+		mVertices[mCurrentVerticesIndex++] = c.x;	
+		mVertices[mCurrentVerticesIndex++] = c.y;	
+	}
+	
+	void Renderer::drawCircle(const Vec2 &pos, float radius, const Vec4 &color, int count) {
+		if (mCurrentVerticesIndex >= RENDERER_MAX_VERTEX || mCurrentIndicesIndex >= RENDERER_MAX_INDICES) {
+			mCurrentVerticesIndex = 0;
+			mCurrentIndicesIndex = 0;
+			fflush();
+		}
+
+		int currentPointCount = mCurrentVerticesIndex / 2;
+		float angle = 360.0f / count;	
+
+		for (int i = 0; i < count; i++) {
+
+			float currentAngle = angle * i;
+			float x = pos.x + radius * cos(currentAngle * (3.1415926 / 180.0f));
+			float y = pos.y + radius * sin(currentAngle * (3.1415926 / 180.0f));
+
+			mVertices[mCurrentVerticesIndex++] = x;	
+			mVertices[mCurrentVerticesIndex++] = y;	
+
+		}
+
+		for (int i = 0; i < count - 2; i++) {
+			mIndices[mCurrentIndicesIndex++] = currentPointCount + 0;	
+			mIndices[mCurrentIndicesIndex++] = currentPointCount + i + 1;	
+			mIndices[mCurrentIndicesIndex++] = currentPointCount + i + 2;	
+		}
+
+	}
+
+
 }
