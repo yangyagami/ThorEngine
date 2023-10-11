@@ -13,6 +13,10 @@ namespace Thor {
 			spdlog::error("Cannot init application!");
 			return false;
 		}	
+		if (mRenderer.init() == false) {
+			spdlog::error("Cannot init renderer!");
+			return false;
+		}
 		spdlog::info("Engine init success.");
 
 		return true;
@@ -23,8 +27,11 @@ namespace Thor {
 	}
 	
 	void Engine::render() {
-		glClear(GL_COLOR_BUFFER_BIT);	
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);	
+		for (int row = -20; row < 20; row++) {
+			for (int col = -20; col < 20; col++) {
+				mRenderer.drawRectangle(Vec2(col * 0.06f, row * 0.06f), Vec2(0.05f, 0.05f), Vec4(1.0f, 0.5f, 1.0f, 1.0f));
+			}
+		}
 	}
 
 	int Engine::run() {

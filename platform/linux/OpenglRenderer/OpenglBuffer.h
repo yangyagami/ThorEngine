@@ -12,6 +12,7 @@ private:
 public:
 	OpenglBuffer(GLenum mode, GLsizeiptr dataSize, GLvoid *data, GLenum usage);	
 	~OpenglBuffer();	
+	void update(GLintptr offset, GLsizeiptr size, const void *data);
 	void bind();
 	void unbind();
 };

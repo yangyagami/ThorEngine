@@ -12,6 +12,11 @@ OpenglBuffer::~OpenglBuffer() {
 	glDeleteBuffers(1, &mBuffer);
 }
 
+
+void OpenglBuffer::update(GLintptr offset, GLsizeiptr size, const void *data) {
+	glBufferSubData(mMode, offset, size, data);
+}
+
 void OpenglBuffer::bind() {
 	glBindBuffer(mMode, mBuffer);
 }
