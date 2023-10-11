@@ -1,6 +1,7 @@
 #include "ThorEngine.h"
 #include "spdlog/spdlog.h"
 #include "glad/glad.h"
+#include "Renderer.h"
 
 namespace Thor {
 	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv) {
@@ -30,14 +31,16 @@ namespace Thor {
 		spdlog::info("Engine running...");
 		while (!mApp.closeRequested()) {
 			update();
+
+			mRenderer.beginBatch();
 			render();
+			mRenderer.endBatch();
 
 			mApp.process();
 		}
 		return 0;
 	}
 
-	
 	Engine::~Engine() {
 		spdlog::info("Engine destroyed.");	
 	}
