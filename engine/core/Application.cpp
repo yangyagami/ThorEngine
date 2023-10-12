@@ -24,4 +24,8 @@ namespace Thor {
 		mWindow.pollEvents();	
 	}
 
+	Vec2 Application::getViewSize() {
+		return mWindow.getSize();
+	}
+
 }

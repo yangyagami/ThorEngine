@@ -52,6 +52,10 @@ namespace Thor {
 	}
 
 
+	Vec2 Window::getSize() {
+		return Vec2(mWidth, mHeight);	
+	}
+
 	Window::~Window() {
 		spdlog::info("Glfw window Destroyed.");
 		glfwTerminate();	

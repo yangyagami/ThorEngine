@@ -16,6 +16,7 @@ public:
 	virtual bool init() = 0;
 	virtual void beginBatch() = 0;
 	virtual void endBatch() = 0;
+	virtual unsigned int getBatchTimes() = 0;
 public:
 	virtual void drawRectangle(const Vec2 &pos, const Vec2 &size, const Vec4 &color) = 0;
 	virtual void drawTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const Vec4 &color) = 0;

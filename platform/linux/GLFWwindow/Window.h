@@ -1,6 +1,8 @@
 #include <string>
 #include <GLFW/glfw3.h>
 
+#include "Vec.hpp"
+
 namespace Thor {
 
 class Window {
@@ -13,6 +15,7 @@ public:
 	bool shouldClose();
 	void swapBuffers();
 	void pollEvents();
+	Vec2 getSize();
 private:
 	int mWidth;
 	int mHeight;
