@@ -52,8 +52,8 @@ namespace Thor {
 	}
 
 
-	Vec2 Window::getSize() {
-		return Vec2(mWidth, mHeight);	
+	glm::vec2 Window::getSize() {
+		return glm::vec2(mWidth, mHeight);	
 	}
 
 	Window::~Window() {

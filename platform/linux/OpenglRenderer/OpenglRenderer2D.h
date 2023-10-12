@@ -5,7 +5,7 @@
 #include <array>
 
 #include "Renderer2D.h"
-#include "Vec.hpp"
+#include "glm/glm.hpp"
 #include "OpenglVao.h"
 #include "OpenglBuffer.h"
 #include "OpenglShader.h"
@@ -39,9 +39,9 @@ public:
 	virtual void endBatch() override;
 	virtual unsigned int getBatchTimes() override;
 public:
-	void drawRectangle(const Vec2 &pos, const Vec2 &size, const Vec4 &color);
-	void drawTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const Vec4 &color);
-	void drawCircle(const Vec2 &pos, float radius, const Vec4 &color, int count = 80);
+	void drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color);
+	void drawTriangle(const glm::vec2 &a, const glm::vec2 &b, const glm::vec2 &c, const glm::vec4 &color);
+	void drawCircle(const glm::vec2 &pos, float radius, const glm::vec4 &color, int count = 80);
 };
 }
 

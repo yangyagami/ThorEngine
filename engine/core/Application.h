@@ -2,7 +2,7 @@
 #define THOR_APPLICATION_H
 
 #include "Window.h"
-#include "Vec.hpp"
+#include "glm/glm.hpp"
 
 namespace Thor {
 
@@ -15,7 +15,7 @@ public:
 	bool init();
 	void process();
 	bool closeRequested();
-	Vec2 getViewSize();
+	glm::vec2 getViewSize();
 };
 
 }

@@ -4,7 +4,7 @@
 namespace Thor {
 
 	Application::Application(int argc, char *argv[]) : mWindow() {
-	
+		spdlog::info("Application created");	
 	}
 	
 	Application::~Application() {
@@ -24,7 +24,7 @@ namespace Thor {
 		mWindow.pollEvents();	
 	}
 
-	Vec2 Application::getViewSize() {
+	glm::vec2 Application::getViewSize() {
 		return mWindow.getSize();
 	}
 

@@ -84,7 +84,7 @@ void main()
 		return mBatchTimes;
 	}
 	
-	void OpenglRenderer2D::drawRectangle(const Vec2 &pos, const Vec2 &size, const Vec4 &color) {
+	void OpenglRenderer2D::drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) {
 		RENDERER2D_BATCH_DO_NEED_REFRESH;
 
 		int currentPointCount = mCurrentVerticesIndex / 2;
@@ -108,7 +108,7 @@ void main()
 	}
 
 
-	void OpenglRenderer2D::drawTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const Vec4 &color) {
+	void OpenglRenderer2D::drawTriangle(const glm::vec2 &a, const glm::vec2 &b, const glm::vec2 &c, const glm::vec4 &color) {
 		RENDERER2D_BATCH_DO_NEED_REFRESH;
 
 		int currentPointCount = mCurrentVerticesIndex / 2;
@@ -125,7 +125,7 @@ void main()
 		mVertices[mCurrentVerticesIndex++] = c.y;	
 	}
 	
-	void OpenglRenderer2D::drawCircle(const Vec2 &pos, float radius, const Vec4 &color, int count) {
+	void OpenglRenderer2D::drawCircle(const glm::vec2 &pos, float radius, const glm::vec4 &color, int count) {
 		RENDERER2D_BATCH_DO_NEED_REFRESH;
 
 		int currentPointCount = mCurrentVerticesIndex / 2;
