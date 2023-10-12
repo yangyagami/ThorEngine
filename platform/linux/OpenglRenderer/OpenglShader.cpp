@@ -53,4 +53,10 @@ void OpenglShader::unbind() {
 	glUseProgram(0);
 }
 
+void OpenglShader::setVec4(const std::string &name, const glm::vec4 &value) {
+	int vertexColorLocation = glGetUniformLocation(mProgram, name.c_str());
+	glUseProgram(mProgram);
+	glUniform4f(vertexColorLocation, value.r, value.g, value.b, value.a);
+}
+
 }

@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "glm/glm.hpp"
 #include "glad/glad.h"
 
 namespace Thor {
@@ -12,6 +13,7 @@ private:
 private:
 	unsigned int createShader(GLenum shaderType, const std::string &source);
 public:
+	void setVec4(const std::string &name, const glm::vec4 &value);
 	void bind();
 	void unbind();
 	OpenglShader(const std::string &vertexShaderSource, const std::string &fragmentShaderSource);

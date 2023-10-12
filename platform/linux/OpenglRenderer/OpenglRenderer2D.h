@@ -17,9 +17,17 @@
 namespace Thor {
 class OpenglRenderer2D : public Renderer2D {
 private:
+	struct Vertex {
+		glm::vec2 pos;
+		glm::vec4 color;
+		
+		Vertex() = default;
+		Vertex(const glm::vec2 &pos, const glm::vec4 &color) : pos(pos), color(color) {}
+	};
+private:
 	int mCurrentVerticesIndex;
 	int mCurrentIndicesIndex;
-	float *mVertices;
+	Vertex *mVertices;
 	unsigned int *mIndices;
 	unsigned int mBatchTimes;
 private:

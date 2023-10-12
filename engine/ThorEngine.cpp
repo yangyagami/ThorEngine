@@ -28,10 +28,11 @@ namespace Thor {
 	}
 	
 	void Engine::render() {
-		mRenderer->drawRectangle(glm::vec2(0.5f, 0.5f), glm::vec2(0.05f, 0.05f), glm::vec4(1.0f, 0.5f, 1.0f, 1.0f));
-		mRenderer->drawTriangle(glm::vec2(0.6f, 0.6f), glm::vec2(0.7f, 0.6f), glm::vec2(0.7f, 0.8f), glm::vec4(1.0f, 0.5f, 1.0f, 1.0f));
-		mRenderer->drawCircle(glm::vec2(0.0f, 0.0f), 0.3f, glm::vec4(1.0f, 0.5f, 1.0f, 1.0f), 36);
-		mRenderer->drawCircle(glm::vec2(-0.4f, -0.4f), 0.3f, glm::vec4(1.0f, 0.5f, 1.0f, 1.0f), 36);
+		mRenderer->drawRectangle(glm::vec2(0.5f, 0.5f), glm::vec2(0.05f, 0.05f), glm::vec4(1.0f, 0.7f, 1.0f, 1.0f));
+		mRenderer->drawRectangle(glm::vec2(0.2f, 0.2f), glm::vec2(0.05f, 0.05f), glm::vec4(0.2f, 0.7f, 1.0f, 1.0f));
+		//mRenderer->drawTriangle(glm::vec2(0.6f, 0.6f), glm::vec2(0.7f, 0.6f), glm::vec2(0.7f, 0.8f), glm::vec4(1.0f, 0.5f, 1.0f, 1.0f));
+		//mRenderer->drawCircle(glm::vec2(0.0f, 0.0f), 0.3f, glm::vec4(1.0f, 0.5f, 1.0f, 1.0f), 36);
+		//mRenderer->drawCircle(glm::vec2(-0.4f, -0.4f), 0.3f, glm::vec4(1.0f, 0.5f, 0.7f, 1.0f), 36);
 	}
 
 	int Engine::run() {
