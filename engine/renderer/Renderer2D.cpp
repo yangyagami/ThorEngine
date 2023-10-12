@@ -1,5 +1,5 @@
 #include "OpenglRenderer2D.h"
-#include "Vec.hpp"
+#include "glm/glm.hpp"
 
 namespace Thor {
 
