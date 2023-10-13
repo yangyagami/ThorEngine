@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "Editor.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -13,6 +15,7 @@ namespace Thor {
     	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		mIO = &io;
+		std::fill(mBackgroundColor.begin(), mBackgroundColor.end(), 0);
 	}
 	
 	Editor::~Editor() {
@@ -48,7 +51,7 @@ namespace Thor {
 
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
         {
-            ImGui::Begin("Status");                          // Create a window called "Hello, world!" and append into it.
+            ImGui::Begin("DebugInfo");                          // Create a window called "Hello, world!" and append into it.
 
             ImGui::Text("batchtimes = %d", mRenderer2D->getBatchTimes());
 			ImGui::ColorEdit4("BackgroundColor", &mBackgroundColor[0]);

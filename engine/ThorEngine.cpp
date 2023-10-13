@@ -5,12 +5,18 @@
 #include "Texture2D.h"
 
 namespace Thor {
-std::unique_ptr<Texture2D> texture;
-	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr) {
+	std::unique_ptr<Texture2D> texture;
+
+	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mCurrentScene(nullptr) {
 		spdlog::info("Engine created");
 	}
 
-	bool Engine::init() {
+	bool Engine::init(Scene *scene) {
+		if (scene == nullptr) {
+			spdlog::error("Cannot start with null scene");
+			return false;
+		}
+		mCurrentScene = scene;
 		if (mApp.init() == false) {
 			spdlog::error("Cannot init application!");
 			return false;
@@ -23,6 +29,11 @@ std::unique_ptr<Texture2D> texture;
 		auto glfwWindow = mApp.getWindow().getGLFWWindow();
 		mEditor = std::make_unique<Editor>(glfwWindow, mRenderer);
 		mEditor->init();
+
+		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer);
+		
+		mCurrentScene->init();
+
 		spdlog::info("Engine init success.");
 
 		texture = Texture2D::create("test.png");
@@ -32,15 +43,11 @@ std::unique_ptr<Texture2D> texture;
 
 	void Engine::update() {
 		// logic stuff	
+		if (mCurrentScene != nullptr) mCurrentScene->update();
 	}
 	
 	void Engine::render() {
-		mRenderer->drawRectangle(glm::vec2(0.5f, 0.5f), glm::vec2(0.05f, 0.05f), glm::vec4(1.0f, 0.7f, 1.0f, 1.0f));
-		mRenderer->drawRectangle(glm::vec2(0.2f, 0.2f), glm::vec2(0.05f, 0.05f), glm::vec4(0.2f, 0.7f, 1.0f, 1.0f));
-		mRenderer->drawTriangle(glm::vec2(0.6f, 0.6f), glm::vec2(0.7f, 0.6f), glm::vec2(0.7f, 0.8f), glm::vec4(1.0f, 0.5f, 1.0f, 1.0f));
-		mRenderer->drawCircle(glm::vec2(0.0f, 0.0f), 0.3f, glm::vec4(1.0f, 0.5f, 1.0f, 1.0f), 36);
-		mRenderer->drawCircle(glm::vec2(-0.4f, -0.4f), 0.3f, glm::vec4(1.0f, 0.5f, 0.7f, 1.0f), 36);
-		mRenderer->drawTexture(texture, glm::vec2(0.0f, 0.0f));
+		if (mCurrentScene != nullptr) mCurrentScene->render();
 	}
 
 	int Engine::run() {

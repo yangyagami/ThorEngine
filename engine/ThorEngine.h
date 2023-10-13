@@ -6,6 +6,8 @@
 #include "Application.h"
 #include "Renderer2D.h"
 #include "Editor.h"
+#include "Scene.h"
+#include "GlobalContext.h"
 
 namespace Thor {
 	class Engine {
@@ -13,13 +15,14 @@ namespace Thor {
 		std::unique_ptr<Renderer2D> mRenderer;
 		Application mApp;
 		std::unique_ptr<Editor> mEditor;
+		Scene *mCurrentScene;
 	private:
 		void update();
 		void render();
 	public:
 		Engine(int argc, char *argv[]);
 		~Engine();
-		bool init();
+		bool init(Scene *scene);
 		int run();
 	};
 }
