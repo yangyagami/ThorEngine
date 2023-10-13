@@ -28,4 +28,8 @@ namespace Thor {
 		return mWindow.getSize();
 	}
 
+	Window &Application::getWindow() {
+		return mWindow;	
+	}
+
 }

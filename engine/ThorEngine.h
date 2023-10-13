@@ -5,12 +5,14 @@
 
 #include "Application.h"
 #include "Renderer2D.h"
+#include "Editor.h"
 
 namespace Thor {
 	class Engine {
 	private:
 		std::unique_ptr<Renderer2D> mRenderer;
 		Application mApp;
+		std::unique_ptr<Editor> mEditor;
 	private:
 		void update();
 		void render();

@@ -19,6 +19,8 @@ public:
 	virtual void endBatch() = 0;
 	virtual unsigned int getBatchTimes() = 0;
 public:
+	virtual void setClearColor(const glm::vec4 &color) = 0;
+	virtual glm::vec4 getClearColor() = 0;
 	virtual void drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) = 0;
 	virtual void drawTriangle(const glm::vec2 &a, const glm::vec2 &b, const glm::vec2 &c, const glm::vec4 &color) = 0;
 	virtual void drawCircle(const glm::vec2 &pos, float radius, const glm::vec4 &color, int count = 80) = 0;

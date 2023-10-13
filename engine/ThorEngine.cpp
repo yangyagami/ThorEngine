@@ -4,10 +4,9 @@
 #include "Renderer2D.h"
 #include "Texture2D.h"
 
-
 namespace Thor {
 std::unique_ptr<Texture2D> texture;
-	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv) {
+	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr) {
 		spdlog::info("Engine created");
 	}
 
@@ -21,6 +20,9 @@ std::unique_ptr<Texture2D> texture;
 			spdlog::error("Cannot init renderer!");
 			return false;
 		}
+		auto glfwWindow = mApp.getWindow().getGLFWWindow();
+		mEditor = std::make_unique<Editor>(glfwWindow, mRenderer);
+		mEditor->init();
 		spdlog::info("Engine init success.");
 
 		texture = Texture2D::create("test.png");
@@ -45,12 +47,13 @@ std::unique_ptr<Texture2D> texture;
 		spdlog::info("Engine running...");
 		while (!mApp.closeRequested()) {
 			update();
+			mEditor->update();
 
 			mRenderer->beginBatch();
 			render();
 			mRenderer->endBatch();
 
-			spdlog::info("batchtimes: {}", mRenderer->getBatchTimes());
+			mEditor->render();
 
 			mApp.process();
 		}

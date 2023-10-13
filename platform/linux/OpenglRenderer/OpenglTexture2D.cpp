@@ -52,6 +52,7 @@ namespace Thor {
 	
 	OpenglTexture2D::~OpenglTexture2D() {
 		stbi_image_free(mData);
+		glDeleteTextures(1, &mTexture);
 	}
 
 	glm::vec2 OpenglTexture2D::getSize() {

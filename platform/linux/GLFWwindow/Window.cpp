@@ -61,4 +61,8 @@ namespace Thor {
 		glfwTerminate();	
 	}
 
+	GLFWwindow *Window::getGLFWWindow() {
+		return mGlfwWindow;
+	}
+
 }

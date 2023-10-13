@@ -10,6 +10,8 @@ class Application {
 private:
 	Window mWindow;
 public:
+	Window &getWindow();
+public:
 	Application(int argc, char *argv[]);
 	~Application();
 	bool init();

@@ -28,6 +28,7 @@ private:
 		Vertex(const glm::vec2 &pos, const glm::vec4 &color, const glm::vec2 &texCoord) : pos(pos), color(color), texCoord(texCoord) {}
 	};
 private:
+	glm::vec4 mBackgroundColor;
 	int mCurrentVerticesIndex;
 	int mCurrentIndicesIndex;
 	Vertex *mVertices;
@@ -40,7 +41,7 @@ private:
 	std::unique_ptr<OpenglShader> mShader;	
 
 	OpenglTexture2D mDefaultTexture;
-	OpenglTexture2D mCurrentTexture;
+	OpenglTexture2D *mCurrentTexture;
 private:
 	void render();
 public:
@@ -53,6 +54,8 @@ public:
 	virtual void endBatch() override;
 	virtual unsigned int getBatchTimes() override;
 public:
+	glm::vec4 getClearColor() override;
+	void setClearColor(const glm::vec4 &color) override;
 	void drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) override;
 	void drawTriangle(const glm::vec2 &a, const glm::vec2 &b, const glm::vec2 &c, const glm::vec4 &color) override;
 	void drawCircle(const glm::vec2 &pos, float radius, const glm::vec4 &color, int count = 80) override;

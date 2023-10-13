@@ -16,10 +16,11 @@ public:
 	void swapBuffers();
 	void pollEvents();
 	glm::vec2 getSize();
+	GLFWwindow *getGLFWWindow();
 private:
+	GLFWwindow *mGlfwWindow;
 	int mWidth;
 	int mHeight;
-	GLFWwindow *mGlfwWindow;
 	std::string mWindowTitle;
 };
 
