@@ -1,3 +1,6 @@
+#ifndef THOR_GLFW_WINDOW_H
+#define THOR_GLFW_WINDOW_H
+
 #include <string>
 #include <GLFW/glfw3.h>
 
@@ -8,20 +11,19 @@ namespace Thor {
 class Window {
 public:
 	Window();
-	Window(std::string title);
-	Window(int width, int height, std::string title);
 	~Window();
-	bool init();
+	bool init(int width, int height, const std::string &title = "ThorEngine");
 	bool shouldClose();
 	void swapBuffers();
 	void pollEvents();
-	glm::vec2 getSize();
 	GLFWwindow *getGLFWWindow();
+	glm::vec2 getSize();
+	int getKeyState(int key);
 private:
 	GLFWwindow *mGlfwWindow;
-	int mWidth;
-	int mHeight;
 	std::string mWindowTitle;
 };
 
 }
+
+#endif

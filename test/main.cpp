@@ -3,6 +3,7 @@
 #include "ThorEngine.h"
 #include "spdlog/spdlog.h"
 #include "TestScene.h"
+#include "Camera2D.hpp"
 
 int main(int argc, char *argv[]) {
 	Thor::Engine engine(argc, argv);

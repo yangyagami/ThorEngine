@@ -3,17 +3,20 @@
 
 #include "Window.h"
 #include "glm/glm.hpp"
+#include "Keyboard.h"
 
 namespace Thor {
 
 class Application {
 private:
 	Window mWindow;
+	Keyboard mKeyboard;
 public:
 	Window &getWindow();
 public:
 	Application(int argc, char *argv[]);
 	~Application();
+	Keyboard &getKeyboard();
 	bool init();
 	void process();
 	bool closeRequested();

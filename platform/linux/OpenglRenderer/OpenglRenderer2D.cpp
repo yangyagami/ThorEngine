@@ -51,12 +51,15 @@ layout (location = 0) in vec2 aPos;
 layout (location = 1) in vec4 aColor;
 layout (location = 2) in vec2 aTexCoord;
 
+uniform mat4 view;
+uniform mat4 projection;
+
 out vec4 customColor;
 out vec2 TexCoord;
 
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);
+    gl_Position = projection * view * vec4(aPos, 0.0, 1.0);
 	customColor = aColor;
 	TexCoord = aTexCoord;
 }
@@ -89,6 +92,9 @@ void main()
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mProjection = glm::mat4(1.0f);
+		mView = glm::mat4(1.0f);
 		return true;	
 	}
 
@@ -113,6 +119,9 @@ void main()
 
 		mCurrentVerticesIndex = mCurrentIndicesIndex = 0;
 		mCurrentTexture = nullptr;
+
+		mShader->setMat4("projection", mProjection);
+		mShader->setMat4("view", mView);
 
 		mBatchTimes = 1;
 	}
@@ -231,6 +240,14 @@ void main()
 
 	glm::vec4 OpenglRenderer2D::getClearColor() {
 		return mBackgroundColor;
+	}
+
+	void OpenglRenderer2D::setView(glm::mat4 &&view) {
+		mView = view;	
+	}
+
+	void OpenglRenderer2D::setProjection(glm::mat4 &&projection) {
+		mProjection = projection;	
 	}
 
 }

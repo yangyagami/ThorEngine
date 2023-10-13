@@ -3,25 +3,18 @@
 #include "glad/glad.h"
 
 namespace Thor {
-	Window::Window() : Window(800, 600, "ThorEngine") {
-	
-	}
-	
-	Window::Window(std::string title) : Window(800, 600, title) {
-	
-	}
-	
-	Window::Window(int width, int height, std::string title) : mGlfwWindow(nullptr), mWidth(width), mHeight(height), mWindowTitle(title) {
+	Window::Window() : mGlfwWindow(nullptr) {
 		
 	}
 	
-	bool Window::init() {
+	bool Window::init(int width, int height, const std::string &title) {
+		mWindowTitle = title;
 		if (!glfwInit()) {
 			spdlog::error("Init glfw failed!");
 			return false;
 		}
 
-		mGlfwWindow = glfwCreateWindow(mWidth, mHeight, mWindowTitle.c_str(), nullptr, nullptr);
+		mGlfwWindow = glfwCreateWindow(width, height, mWindowTitle.c_str(), nullptr, nullptr);
 		if (!mGlfwWindow) {
 			glfwTerminate();
 			spdlog::error("Create glfw window failed!");
@@ -30,8 +23,13 @@ namespace Thor {
 
 		glfwMakeContextCurrent(mGlfwWindow);
 		gladLoadGL();
+		glViewport(0, 0, width, height);
 		glfwSetErrorCallback([](int error, const char *description){
 			spdlog::error("Error: {}", description);	
+		});
+		glfwSetWindowSizeCallback(mGlfwWindow, [](GLFWwindow *window, int width, int height){
+			glfwSetWindowSize(window, width, height);
+			glViewport(0, 0, width, height);
 		});
 
 		spdlog::info("Create glfw window success.");
@@ -53,7 +51,9 @@ namespace Thor {
 
 
 	glm::vec2 Window::getSize() {
-		return glm::vec2(mWidth, mHeight);	
+		int width, height;
+		glfwGetWindowSize(mGlfwWindow, &width, &height);
+		return glm::vec2(width, height);	
 	}
 
 	Window::~Window() {
@@ -65,4 +65,7 @@ namespace Thor {
 		return mGlfwWindow;
 	}
 
+	int Window::getKeyState(int key) {
+		return glfwGetKey(mGlfwWindow, key);	
+	}
 }

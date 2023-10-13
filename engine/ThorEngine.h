@@ -8,6 +8,7 @@
 #include "Editor.h"
 #include "Scene.h"
 #include "GlobalContext.h"
+#include "entt/entt.hpp"
 
 namespace Thor {
 	class Engine {
@@ -16,6 +17,7 @@ namespace Thor {
 		Application mApp;
 		std::unique_ptr<Editor> mEditor;
 		Scene *mCurrentScene;
+		entt::registry mRegistry;
 	private:
 		void update();
 		void render();

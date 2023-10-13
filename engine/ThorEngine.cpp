@@ -7,7 +7,7 @@
 namespace Thor {
 	std::unique_ptr<Texture2D> texture;
 
-	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mCurrentScene(nullptr) {
+	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mCurrentScene(nullptr), mRegistry() {
 		spdlog::info("Engine created");
 	}
 
@@ -30,7 +30,7 @@ namespace Thor {
 		mEditor = std::make_unique<Editor>(glfwWindow, mRenderer);
 		mEditor->init();
 
-		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer);
+		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp);
 		
 		mCurrentScene->init();
 

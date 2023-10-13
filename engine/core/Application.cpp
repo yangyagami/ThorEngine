@@ -3,7 +3,7 @@
 
 namespace Thor {
 
-	Application::Application(int argc, char *argv[]) : mWindow() {
+	Application::Application(int argc, char *argv[]) : mWindow(), mKeyboard(&mWindow) {
 		spdlog::info("Application created");	
 	}
 	
@@ -12,7 +12,7 @@ namespace Thor {
 	}
 	
 	bool Application::init() {
-		return mWindow.init();	
+		return mWindow.init(1024, 768);	
 	}
 
 	bool Application::closeRequested() {
@@ -32,4 +32,7 @@ namespace Thor {
 		return mWindow;	
 	}
 
+	Keyboard &Application::getKeyboard() {
+		return mKeyboard;	
+	}
 }

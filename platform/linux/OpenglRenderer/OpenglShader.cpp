@@ -1,6 +1,7 @@
 #include "glad/glad.h"
 #include "OpenglShader.h"
 #include "spdlog/spdlog.h"
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Thor {
 
@@ -54,9 +55,20 @@ void OpenglShader::unbind() {
 }
 
 void OpenglShader::setVec4(const std::string &name, const glm::vec4 &value) {
-	int vertexColorLocation = glGetUniformLocation(mProgram, name.c_str());
+	auto location = getUniformLocation(name);
+	glUniform4f(location, value.r, value.g, value.b, value.a);
+}
+
+int OpenglShader::getUniformLocation(const std::string &name) {
+	int location = glGetUniformLocation(mProgram, name.c_str());
 	glUseProgram(mProgram);
-	glUniform4f(vertexColorLocation, value.r, value.g, value.b, value.a);
+
+	return location;
+}
+
+void OpenglShader::setMat4(const std::string &name, const glm::mat4 &value) {
+	auto location = getUniformLocation(name);
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
 }
