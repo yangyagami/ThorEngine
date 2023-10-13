@@ -40,7 +40,7 @@ private:
 	std::unique_ptr<OpenglShader> mShader;	
 
 	OpenglTexture2D mDefaultTexture;
-	OpenglTexture2D *mCurrentTexture;
+	OpenglTexture2D mCurrentTexture;
 private:
 	void render();
 public:

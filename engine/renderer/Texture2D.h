@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 
+#include "glm/glm.hpp"
+
 namespace Thor {
 
 class Texture2D {
@@ -11,8 +13,7 @@ public:
 	static std::unique_ptr<Texture2D> create();
 	static std::unique_ptr<Texture2D> create(std::string path);
 public:
-	virtual int getWidth() = 0;
-	virtual int getHeight() = 0;
+	virtual glm::vec2 getSize() = 0;
 };
 
 }

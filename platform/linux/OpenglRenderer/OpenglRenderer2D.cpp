@@ -10,8 +10,21 @@
 	} \
 }
 
+#define RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(texture) { \
+	if (texture.getID() != mCurrentTexture.getID()) { \
+		glm::vec2 size1 = texture.getSize(); \
+		glm::vec2 size2 = mCurrentTexture.getSize(); \
+		if (!(size1.x == size2.x && size1.y == size2.y)) { \
+			mCurrentTexture = texture; \
+			fflush(); \
+		} else { \
+			mCurrentTexture.update(texture); \
+		} \
+	} \
+}
+
 namespace Thor {
-	OpenglRenderer2D::OpenglRenderer2D() : mVao(nullptr), mVbo(nullptr), mEbo(nullptr), mShader(nullptr), mCurrentTexture(nullptr) {
+	OpenglRenderer2D::OpenglRenderer2D() : mVao(nullptr), mVbo(nullptr), mEbo(nullptr), mShader(nullptr) {
 	
 	}
 	
@@ -23,7 +36,7 @@ namespace Thor {
 	bool OpenglRenderer2D::init() {
 		spdlog::info("OpenglRenderer2D init success");	
 		mCurrentIndicesIndex = mCurrentVerticesIndex = 0;	
-		mCurrentTexture = &mDefaultTexture;
+		mCurrentTexture = mDefaultTexture;
 
 		mVertices = new Vertex[RENDERER2D_MAX_VERTEX + RENDERER2D_EXTERN_TRIANGLE * 3];
 		mIndices = new unsigned int[RENDERER2D_MAX_INDICES + RENDERER2D_EXTERN_TRIANGLE * 6];
@@ -107,12 +120,6 @@ void main()
 	void OpenglRenderer2D::drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) {
 		RENDERER2D_BATCH_DO_NEED_REFRESH;
 
-		if (&mDefaultTexture != mCurrentTexture) {
-			fflush();
-		}
-		mDefaultTexture.bind();
-		mCurrentTexture = &mDefaultTexture;
-
 		int currentPointCount = mCurrentVerticesIndex;
 
 		mIndices[mCurrentIndicesIndex++] = currentPointCount + 0;	
@@ -126,17 +133,13 @@ void main()
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x + size.x, pos.y), color, glm::vec2(1.0f, 0.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x + size.x, pos.y + size.y), color, glm::vec2(1.0f, 1.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x, pos.y + size.y), color, glm::vec2(0.0f, 1.0f));	
+
+		RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(mDefaultTexture);
 	}
 
 
 	void OpenglRenderer2D::drawTriangle(const glm::vec2 &a, const glm::vec2 &b, const glm::vec2 &c, const glm::vec4 &color) {
 		RENDERER2D_BATCH_DO_NEED_REFRESH;
-
-		if (&mDefaultTexture != mCurrentTexture) {
-			fflush();
-		}
-		mDefaultTexture.bind();
-		mCurrentTexture = &mDefaultTexture;
 
 		int currentPointCount = mCurrentVerticesIndex;
 
@@ -147,16 +150,12 @@ void main()
 		mVertices[mCurrentVerticesIndex++] = Vertex(a, color, glm::vec2(0.0f, 0.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(b, color, glm::vec2(1.0f, 0.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(c, color, glm::vec2(0.5f, 0.5f));	
+
+		RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(mDefaultTexture);
 	}
 	
 	void OpenglRenderer2D::drawCircle(const glm::vec2 &pos, float radius, const glm::vec4 &color, int count) {
 		RENDERER2D_BATCH_DO_NEED_REFRESH;
-
-		if (&mDefaultTexture != mCurrentTexture) {
-			fflush();
-		}
-		mDefaultTexture.bind();
-		mCurrentTexture = &mDefaultTexture;
 
 		if (count >= 200) count = 200;
 
@@ -188,17 +187,11 @@ void main()
 			mIndices[mCurrentIndicesIndex++] = currentPointCount + i + 2;	
 		}
 
+		RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(mDefaultTexture);
 	}
 
 	void OpenglRenderer2D::drawTexture(const std::unique_ptr<Texture2D> &texture, const glm::vec2 &pos) {
 		RENDERER2D_BATCH_DO_NEED_REFRESH;
-
-		auto openglTexture2D = dynamic_cast<OpenglTexture2D&>(*texture);
-		if (texture.get() != mCurrentTexture) {
-			fflush();
-		}
-		openglTexture2D.bind();
-		mCurrentTexture = (OpenglTexture2D *)texture.get();
 
 		int currentPointCount = mCurrentVerticesIndex;
 
@@ -216,6 +209,9 @@ void main()
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x + size.x, pos.y), color, glm::vec2(1.0f, 0.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x + size.x, pos.y + size.y), color, glm::vec2(1.0f, 1.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x, pos.y + size.y), color, glm::vec2(0.0f, 1.0f));	
+
+		auto &openglTexture2D = dynamic_cast<OpenglTexture2D&>(*texture);
+		RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(openglTexture2D);
 	}
 
 

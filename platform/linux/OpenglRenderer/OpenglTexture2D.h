@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "glad/glad.h"
 #include "Texture2D.h"
 
 namespace Thor {
@@ -11,14 +12,19 @@ private:
 	int mWidth;
 	int mHeight;
 	unsigned int mTexture;
+	unsigned char *mData;
+	GLenum mFormat;
 public:
-	void unbind();
-	void bind();
-	virtual int getWidth() override;
-	virtual int getHeight() override;
 	OpenglTexture2D();
 	OpenglTexture2D(std::string path);
 	~OpenglTexture2D();
+	void unbind();
+	void bind();
+	void update(const OpenglTexture2D &other);
+	void operator=(const OpenglTexture2D &other);
+	unsigned int getID();
+public:
+	virtual glm::vec2 getSize() override;
 };
 }
 

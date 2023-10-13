@@ -25,8 +25,8 @@ namespace Thor {
 	OpenglTexture2D::OpenglTexture2D(std::string path) {
 		int nrChannels;
 		stbi_set_flip_vertically_on_load(true);
-		unsigned char *data = stbi_load(path.c_str(), &mWidth, &mHeight, &nrChannels, 0);	
-		if (data == nullptr) {
+		mData = stbi_load(path.c_str(), &mWidth, &mHeight, &nrChannels, 0);	
+		if (mData == nullptr) {
 			spdlog::error("Cannot open file: {}!", path);
 			return;
 		}
@@ -36,11 +36,9 @@ namespace Thor {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		GLenum format = nrChannels == 3 ? GL_RGB : GL_RGBA;
-		glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, data);
+		GLenum mFormat = nrChannels == 3 ? GL_RGB : GL_RGBA;
+		glTexImage2D(GL_TEXTURE_2D, 0, mFormat, mWidth, mHeight, 0, mFormat, GL_UNSIGNED_BYTE, mData);
 		glGenerateMipmap(GL_TEXTURE_2D);
-
-		stbi_image_free(data);
 	}
 	
 	void OpenglTexture2D::unbind() {
@@ -53,14 +51,30 @@ namespace Thor {
 	}
 	
 	OpenglTexture2D::~OpenglTexture2D() {
-	
+		stbi_image_free(mData);
 	}
-	
-	int OpenglTexture2D::getWidth() {
-		return mWidth;
+
+	glm::vec2 OpenglTexture2D::getSize() {
+		return glm::vec2(mWidth, mHeight);
 	}
-	
-	int OpenglTexture2D::getHeight() {
-		return mHeight;
+
+	void OpenglTexture2D::update(const OpenglTexture2D &other) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mTexture);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, mWidth, mHeight, other.mFormat, GL_UNSIGNED_BYTE, other.mData);
+	}
+
+	void OpenglTexture2D::operator=(const OpenglTexture2D &other) {
+		mWidth = other.mWidth;
+		mHeight = other.mHeight;
+		mTexture = other.mTexture;
+		mData = other.mData;
+		mFormat = other.mFormat;
+
+		bind();
+	}
+
+	unsigned int OpenglTexture2D::getID() {
+		return mTexture;
 	}
 }
