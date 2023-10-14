@@ -29,7 +29,7 @@
 }
 
 namespace Thor {
-	OpenglRenderer2D::OpenglRenderer2D() : mVao(nullptr), mVbo(nullptr), mEbo(nullptr), mShader(nullptr), mCurrentTexture(nullptr) {
+	OpenglRenderer2D::OpenglRenderer2D() : mVao(nullptr), mVbo(nullptr), mEbo(nullptr), mFbo(nullptr), mShader(nullptr), mCurrentTexture(nullptr) {
 	
 	}
 	
@@ -238,7 +238,16 @@ void main()
 		mBackgroundColor = color;	
 	}
 
-	glm::vec4 OpenglRenderer2D::getClearColor() {
+    void OpenglRenderer2D::setRenderToTexture(Texture2D &texture) {
+		OpenglTexture2D &openglTexture = dynamic_cast<OpenglTexture2D&>(texture);
+		if (mFbo != nullptr) {
+			mFbo = std::make_unique<OpenglFrameBuffer>(openglTexture);
+		} else {
+			spdlog::warn("Already set a framebuffer!");
+		}
+    }
+
+    glm::vec4 OpenglRenderer2D::getClearColor() {
 		return mBackgroundColor;
 	}
 

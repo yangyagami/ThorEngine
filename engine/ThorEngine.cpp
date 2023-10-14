@@ -5,8 +5,6 @@
 #include "Texture2D.h"
 
 namespace Thor {
-	std::unique_ptr<Texture2D> texture;
-
 	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mCurrentScene(nullptr), mRegistry() {
 		spdlog::info("Engine created");
 	}
@@ -27,17 +25,15 @@ namespace Thor {
 			return false;
 		}
 		auto glfwWindow = mApp.getWindow().getGLFWWindow();
-		mEditor = std::make_unique<Editor>(glfwWindow, mRenderer);
-		mEditor->init();
 
 		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp);
 		
 		mCurrentScene->init();
 
+		mEditor = std::make_unique<Editor>(glfwWindow, mRenderer);
+		mEditor->init();
+
 		spdlog::info("Engine init success.");
-
-		texture = Texture2D::create("test.png");
-
 		return true;
 	}
 

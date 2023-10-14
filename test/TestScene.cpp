@@ -3,8 +3,13 @@
 #include "spdlog/spdlog.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "OpenglTexture2D.h"
 
 void TestScene::init() {
+	Thor::OpenglTexture2D texture1("test.png");
+	Thor::OpenglTexture2D texture2("test.png");
+	texture2.update(texture1);
+	texture1.update(texture2);
 	auto &globalContext = Thor::GlobalContext::instance;
 	auto &renderer = globalContext->renderer2D;
 	auto &registry = globalContext->registry;

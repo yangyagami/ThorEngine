@@ -8,21 +8,40 @@
 #include "spdlog/spdlog.h"
 
 namespace Thor {
-	OpenglTexture2D::OpenglTexture2D() {
-		unsigned char data[4] = { 255, 255, 255, 255 };	
-		mWidth = 1;
-		mHeight = 1;	
+	void OpenglTexture2D::generateTexture() {
 		glGenTextures(1, &mTexture);
 		glBindTexture(GL_TEXTURE_2D, mTexture);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, mFormat, mWidth, mHeight, 0, mFormat, GL_UNSIGNED_BYTE, mData);
 		glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+    void OpenglTexture2D::destroyData() {
+		if (mRefCnt != nullptr) {
+			if (*mRefCnt == 0) {
+				if (mFromStb)
+					stbi_image_free(mData);
+				delete mRefCnt;
+			} else {
+				--(*mRefCnt);
+			}
+		}
+    }
+
+    OpenglTexture2D::OpenglTexture2D() : mRefCnt(nullptr) {
+		mFromStb = false;
+		unsigned char data[4] = { 255, 255, 255, 255 };	
+		mData = data;
+		mWidth = 1;
+		mHeight = 1;	
+		generateTexture();
 	}
 	
-	OpenglTexture2D::OpenglTexture2D(std::string path) {
+	OpenglTexture2D::OpenglTexture2D(std::string path) : mRefCnt(nullptr) {
+		mFromStb = true;
 		int nrChannels;
 		stbi_set_flip_vertically_on_load(true);
 		mData = stbi_load(path.c_str(), &mWidth, &mHeight, &nrChannels, 0);	
@@ -30,18 +49,17 @@ namespace Thor {
 			spdlog::error("Cannot open file: {}!", path);
 			return;
 		}
-		glGenTextures(1, &mTexture);
-		glBindTexture(GL_TEXTURE_2D, mTexture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		GLenum mFormat = nrChannels == 3 ? GL_RGB : GL_RGBA;
-		glTexImage2D(GL_TEXTURE_2D, 0, mFormat, mWidth, mHeight, 0, mFormat, GL_UNSIGNED_BYTE, mData);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		mFormat = nrChannels == 3 ? GL_RGB : GL_RGBA;
+		generateTexture();
 	}
-	
-	void OpenglTexture2D::unbind() {
+
+    OpenglTexture2D::OpenglTexture2D(unsigned char *data, int width, int height, int channels) : mWidth(width), mHeight(height), mData(data), mFormat(format), mRefCnt(nullptr) {
+		mFromStb = false;
+		mFormat = channels == 3 ? GL_RGB : GL_RGBA;
+		generateTexture();
+	}
+
+    void OpenglTexture2D::unbind() {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	
@@ -51,7 +69,7 @@ namespace Thor {
 	}
 	
 	OpenglTexture2D::~OpenglTexture2D() {
-		stbi_image_free(mData);
+		destroyData();
 		glDeleteTextures(1, &mTexture);
 	}
 
@@ -59,20 +77,20 @@ namespace Thor {
 		return glm::vec2(mWidth, mHeight);
 	}
 
-	void OpenglTexture2D::update(const OpenglTexture2D &other) {
+	void OpenglTexture2D::update(OpenglTexture2D &other) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mTexture);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, mWidth, mHeight, other.mFormat, GL_UNSIGNED_BYTE, other.mData);
-	}
-
-	void OpenglTexture2D::operator=(const OpenglTexture2D &other) {
-		mWidth = other.mWidth;
-		mHeight = other.mHeight;
-		mTexture = other.mTexture;
 		mData = other.mData;
-		mFormat = other.mFormat;
-
-		bind();
+		if (other.mRefCnt == nullptr) {
+			other.mRefCnt = new int;
+			*other.mRefCnt = 0;
+		}
+		if (mRefCnt != nullptr) {
+			destroyData();
+		}
+		mRefCnt = other.mRefCnt;
+		++(*mRefCnt);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, mWidth, mHeight, other.mFormat, GL_UNSIGNED_BYTE, other.mData);
 	}
 
 	unsigned int OpenglTexture2D::getID() {

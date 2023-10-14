@@ -10,6 +10,7 @@
 #include "OpenglBuffer.h"
 #include "OpenglShader.h"
 #include "OpenglTexture2D.h"
+#include "OpenglFrameBuffer.h"
 
 #define RENDERER2D_MAX_TRIANGLE (10000)
 #define RENDERER2D_EXTERN_TRIANGLE (300)
@@ -39,7 +40,8 @@ private:
 private:
 	std::unique_ptr<OpenglVao> mVao;	
 	std::unique_ptr<OpenglBuffer> mVbo;	
-	std::unique_ptr<OpenglBuffer> mEbo;	
+	std::unique_ptr<OpenglBuffer> mEbo;
+	std::unique_ptr<OpenglFrameBuffer> mFbo;	
 	std::unique_ptr<OpenglShader> mShader;	
 
 	OpenglTexture2D mDefaultTexture;
@@ -58,6 +60,7 @@ public:
 public:
 	glm::vec4 getClearColor() override;
 	void setClearColor(const glm::vec4 &color) override;
+	void setRenderToTexture(Texture2D &texture) override;
 	void setView(glm::mat4 &&view) override;
 	void setProjection(glm::mat4 &&projection) override;
 	void drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) override;

@@ -2,3 +2,5 @@ build
 .xmake
 compile_commands.json
 .cache
+.fleet
+.vscode
