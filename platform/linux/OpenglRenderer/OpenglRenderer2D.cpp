@@ -11,7 +11,6 @@
 }
 
 #define RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(texture) { \
-	texture.bind(); \
 	if (mCurrentTexture == nullptr) {\
 		mCurrentTexture = &texture; \
 		mCurrentTexture->bind(); \
@@ -238,7 +237,7 @@ void main()
 		mIndices[mCurrentIndicesIndex++] = currentPointCount + 0;
 
 		glm::vec4 color(1.0f, 1.0f, 1.0f, 1.0f);
-		glm::vec2 size(0.5f, 0.5f);
+		glm::vec2 size = texture->getSize();
 
 		mVertices[mCurrentVerticesIndex++] = Vertex(pos, color, glm::vec2(0.0f, 0.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x + size.x, pos.y), color, glm::vec2(1.0f, 0.0f));	

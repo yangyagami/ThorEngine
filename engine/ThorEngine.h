@@ -24,7 +24,8 @@ namespace Thor {
 	public:
 		Engine(int argc, char *argv[]);
 		~Engine();
-		bool init(Scene *scene);
+		bool init();
+		void switchScene(Scene *scene);
 		int run();
 	};
 }

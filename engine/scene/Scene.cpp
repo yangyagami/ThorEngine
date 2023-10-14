@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 namespace Thor {
-    void Scene::addObject(Object &obj) {
+    void Scene::addObject(Object *obj) {
 		int count = mObjects.size();
 		std::string name = "Object " + std::to_string(count);
 		mObjects[name] = obj;
@@ -20,19 +20,19 @@ namespace Thor {
 
     void Scene::init() {
 		for (auto &&[name, obj] : mObjects) {
-			obj.init();
+			obj->init();
 		}
     }
 
     void Scene::update() {
 		for (auto &&[name, obj] : mObjects) {
-			obj.update();
+			obj->update();
 		}
 	}
 
     void Scene::render() {
 		for (auto &&[name, obj] : mObjects) {
-			obj.render();
+			obj->render();
 		}
 	}
 }

@@ -7,12 +7,14 @@
 
 int main(int argc, char *argv[]) {
 	Thor::Engine engine(argc, argv);
-	
-	TestScene testScene;
 
-	if (engine.init(&testScene) == false) {
+	if (engine.init() == false) {
 		spdlog::error("Engine init failed!");
 		return -1;
 	}
+
+	TestScene testScene;
+	engine.switchScene(&testScene);
+
 	return engine.run();
 }

@@ -8,9 +8,9 @@ class Camera2D : public Object {
 private:
     void initCameraSystem();
 public:
-    void init() override;
-    void update() override;
-    void render() override;
+    virtual void init() override;
+    virtual void update() override;
+    virtual void render() override;
 };
 }
 

@@ -9,12 +9,7 @@ namespace Thor {
 		spdlog::info("Engine created");
 	}
 
-	bool Engine::init(Scene *scene) {
-		if (scene == nullptr) {
-			spdlog::error("Cannot start with null scene");
-			return false;
-		}
-		mCurrentScene = scene;
+	bool Engine::init() {
 		if (mApp.init() == false) {
 			spdlog::error("Cannot init application!");
 			return false;
@@ -26,8 +21,6 @@ namespace Thor {
 		}
 
 		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp);
-		
-		mCurrentScene->init();
 
 		mEditor = std::make_unique<Editor>();
 		mEditor->init();
@@ -36,7 +29,16 @@ namespace Thor {
 		return true;
 	}
 
-	void Engine::update() {
+    void Engine::switchScene(Scene *scene) {
+		if (scene == nullptr) {
+			spdlog::error("Cannot switch null scene");
+			return;
+		}
+		scene->init();
+		mCurrentScene = scene;
+    }
+
+    void Engine::update() {
 		glm::vec2 windowSize = mApp.getWindow().getSize();
 		mApp.setViewSize(windowSize);
 		// logic stuff	

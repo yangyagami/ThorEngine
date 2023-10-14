@@ -10,9 +10,9 @@ namespace Thor {
 
 class Scene {
 private:
-	std::map<std::string, Object> mObjects;
+	std::map<std::string, Object *> mObjects;
 public:
-	void addObject(Object &obj);
+	void addObject(Object *obj);
 	void removeObject(const std::string &name);
 	Scene();
 	~Scene();
