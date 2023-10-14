@@ -7,6 +7,7 @@
 
 #include "imgui_impl_glfw.h"
 #include "Renderer2D.h"
+#include "Scene.h"
 
 namespace Thor {
 class Editor {

@@ -1,21 +1,38 @@
 #include "Scene.h"
 
 namespace Thor {
+    void Scene::addObject(Object &obj) {
+		int count = mObjects.size();
+		std::string name = "Object " + std::to_string(count);
+		mObjects[name] = obj;
+    }
 
-	void Scene::addEntity(entt::entity &entity) {
-		mEntities.push_back(entity);	
-	}
-	
-	void Scene::removeEntity(entt::entity &entity) {
-		mEntities.remove_if([&](entt::entity e){return (entity == e);});
-	}
+    void Scene::removeObject(const std::string &name) {
+		mObjects.erase(name);
+    }
 
-	Scene::Scene() {
-	
-	}
-	
-	Scene::~Scene() {
+    Scene::Scene() {
+    }
+
+    Scene::~Scene() {
 	
 	}
 
+    void Scene::init() {
+		for (auto &&[name, obj] : mObjects) {
+			obj.init();
+		}
+    }
+
+    void Scene::update() {
+		for (auto &&[name, obj] : mObjects) {
+			obj.update();
+		}
+	}
+
+    void Scene::render() {
+		for (auto &&[name, obj] : mObjects) {
+			obj.render();
+		}
+	}
 }

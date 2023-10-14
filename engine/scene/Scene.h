@@ -1,24 +1,25 @@
 #ifndef THOR_SCENE_H
 #define THOR_SCENE_H
 
-#include <list>
+#include <map>
+#include <string>
 
-#include "entt/entt.hpp"
+#include "Object.hpp"
 
 namespace Thor {
 
 class Scene {
 private:
-	std::list<entt::entity> mEntities;
+	std::map<std::string, Object> mObjects;
 public:
-	void addEntity(entt::entity &entity);
-	void removeEntity(entt::entity &entity);
+	void addObject(Object &obj);
+	void removeObject(const std::string &name);
 	Scene();
 	~Scene();
 public:
-	virtual void init() = 0;
-	virtual void update() = 0;
-	virtual void render() = 0;
+	virtual void init();
+	virtual void update();
+	virtual void render();
 
 };
 
