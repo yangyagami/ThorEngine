@@ -35,6 +35,7 @@ namespace Thor {
 		mFromStb = false;
 		unsigned char data[4] = { 255, 255, 255, 255 };	
 		mData = data;
+		mFormat = GL_RGBA;
 		mWidth = 1;
 		mHeight = 1;	
 		generateTexture();
@@ -53,7 +54,7 @@ namespace Thor {
 		generateTexture();
 	}
 
-    OpenglTexture2D::OpenglTexture2D(unsigned char *data, int width, int height, int channels) : mWidth(width), mHeight(height), mData(data), mFormat(format), mRefCnt(nullptr) {
+    OpenglTexture2D::OpenglTexture2D(unsigned char *data, int width, int height, int channels) : mWidth(width), mHeight(height), mData(data), mRefCnt(nullptr) {
 		mFromStb = false;
 		mFormat = channels == 3 ? GL_RGB : GL_RGBA;
 		generateTexture();

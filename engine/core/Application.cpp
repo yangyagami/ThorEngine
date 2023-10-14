@@ -15,7 +15,11 @@ namespace Thor {
 		return mWindow.init(1024, 768);	
 	}
 
-	bool Application::closeRequested() {
+    void Application::setViewSize(const glm::vec2 &size) {
+		mViewSize = size;
+    }
+
+    bool Application::closeRequested() {
 		return mWindow.shouldClose();
 	}
 	
@@ -25,7 +29,7 @@ namespace Thor {
 	}
 
 	glm::vec2 Application::getViewSize() {
-		return mWindow.getSize();
+		return mViewSize;
 	}
 
 	Window &Application::getWindow() {

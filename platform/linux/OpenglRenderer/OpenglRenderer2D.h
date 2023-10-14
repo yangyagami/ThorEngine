@@ -60,7 +60,7 @@ public:
 public:
 	glm::vec4 getClearColor() override;
 	void setClearColor(const glm::vec4 &color) override;
-	void setRenderToTexture(Texture2D &texture) override;
+	void setRenderToTexture(const std::unique_ptr<Texture2D> &texture) override;
 	void setView(glm::mat4 &&view) override;
 	void setProjection(glm::mat4 &&projection) override;
 	void drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) override;

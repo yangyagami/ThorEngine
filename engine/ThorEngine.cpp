@@ -24,13 +24,12 @@ namespace Thor {
 			spdlog::error("Cannot init renderer!");
 			return false;
 		}
-		auto glfwWindow = mApp.getWindow().getGLFWWindow();
 
 		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp);
 		
 		mCurrentScene->init();
 
-		mEditor = std::make_unique<Editor>(glfwWindow, mRenderer);
+		mEditor = std::make_unique<Editor>();
 		mEditor->init();
 
 		spdlog::info("Engine init success.");
@@ -38,6 +37,8 @@ namespace Thor {
 	}
 
 	void Engine::update() {
+		glm::vec2 windowSize = mApp.getWindow().getSize();
+		mApp.setViewSize(windowSize);
 		// logic stuff	
 		if (mCurrentScene != nullptr) mCurrentScene->update();
 	}

@@ -6,10 +6,6 @@
 #include "OpenglTexture2D.h"
 
 void TestScene::init() {
-	Thor::OpenglTexture2D texture1("test.png");
-	Thor::OpenglTexture2D texture2("test.png");
-	texture2.update(texture1);
-	texture1.update(texture2);
 	auto &globalContext = Thor::GlobalContext::instance;
 	auto &renderer = globalContext->renderer2D;
 	auto &registry = globalContext->registry;
@@ -49,6 +45,6 @@ void TestScene::render() {
 	auto &globalContext = Thor::GlobalContext::instance;
 	auto &renderer = globalContext->renderer2D;
 
-	renderer->drawRectangle(glm::vec2(30.0f, 0.0f), glm::vec2(30.5f, 30.5f), glm::vec4(0.2f, 0.2f, 0.1f, 1.0f));
+	renderer->drawRectangle(glm::vec2(30.0f, 30.0f), glm::vec2(130.2f, 130.5f), glm::vec4(0.2f, 0.5f, 0.1f, 1.0f));
 }
 

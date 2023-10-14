@@ -5,9 +5,11 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "GLFW/glfw3.h"
+#include "OpenglTexture2D.h"
+#include "GlobalContext.h"
 
 namespace Thor {
-    Editor::Editor(GLFWwindow *glfwWindow, std::unique_ptr<Renderer2D> &renderer2D) : mIO(nullptr), mRenderer2D(renderer2D), mWindow(glfwWindow), mSceneTexture(nullptr) {
+    Editor::Editor() : mIO(nullptr), mSceneTexture(nullptr) {
     	// Setup Dear ImGui context
     	IMGUI_CHECKVERSION();
     	ImGui::CreateContext();
@@ -17,8 +19,6 @@ namespace Thor {
     	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
 		mIO = &io;
 		std::fill(mBackgroundColor.begin(), mBackgroundColor.end(), 0);
-
-		mSceneTexture = Texture2D::create(nullptr, 800, 600, 4);
 	}
 	
 	Editor::~Editor() {
@@ -29,23 +29,34 @@ namespace Thor {
 	}
 	
 	bool Editor::init() {
+		auto &instance = GlobalContext::instance;
+		auto glfwWindow = instance->app.getWindow().getGLFWWindow();
+		auto &renderer = instance->renderer2D;
     	// Setup Dear ImGui style
     	ImGui::StyleColorsDark();
     	//ImGui::StyleColorsLight();
 
     	// Setup Platform/Renderer backends
-    	ImGui_ImplGlfw_InitForOpenGL(mWindow, true);
+    	ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
     	ImGui_ImplOpenGL3_Init("#version 460");
 
+
+		mSceneTexture = Texture2D::create(nullptr, 1024, 768, 3);
+		renderer->setRenderToTexture(mSceneTexture);
 		return true;
 	}
 	
 	void Editor::update() {
-		mRenderer2D->setClearColor(glm::vec4(mBackgroundColor[0], mBackgroundColor[1], mBackgroundColor[2], mBackgroundColor[3]));
+		auto &instance = GlobalContext::instance;
+		auto &renderer = instance->renderer2D;
+		renderer->setClearColor(glm::vec4(mBackgroundColor[0], mBackgroundColor[1], mBackgroundColor[2], mBackgroundColor[3]));
 	}
 	
 	void Editor::render() {
-		// Start the Dear ImGui frame
+		auto &instance = GlobalContext::instance;
+		auto &app = instance->app;
+		auto &renderer = instance->renderer2D;
+		//Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -94,14 +105,33 @@ namespace Thor {
 
 			drawWindow("Files", [](){});
 	
-			drawWindow("Scene", [](){
+			drawWindow("Scene", [&](){
+				// we access the ImGui window size
+				const float windowWidth = ImGui::GetContentRegionAvail().x;
+				const float windowHeight = ImGui::GetContentRegionAvail().y;
 
+				app.setViewSize(glm::vec2(windowWidth, windowHeight));
+				glViewport(0, 0, windowWidth, windowHeight);
+
+				// we get the screen position of the window
+				ImVec2 pos = ImGui::GetCursorScreenPos();
+				auto &openglTexture2D = *(dynamic_cast<OpenglTexture2D*>(mSceneTexture.get()));
+				ImGui::GetWindowDrawList()->AddImage(
+					(void *)(intptr_t)openglTexture2D.getID(), 
+					ImVec2(pos.x, pos.y), 
+					ImVec2(pos.x + windowWidth, pos.y + windowHeight), 
+					ImVec2(0, 1), 
+					ImVec2(1, 0)
+        		);
+    
 			});
 
-			drawWindow("Components", [](){});
+			drawWindow("Components", [&](){
+				ImGui::ColorPicker4("background", &mBackgroundColor[0]);
+			});
 		
 			drawWindow("DebugInfo", [&](){
-				ImGui::Text("batchtimes = %d", mRenderer2D->getBatchTimes());
+				ImGui::Text("batchtimes = %d", renderer->getBatchTimes());
 			});
 		}, window_flags);
 

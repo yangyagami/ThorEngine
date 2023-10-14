@@ -11,6 +11,7 @@
 }
 
 #define RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(texture) { \
+	texture.bind(); \
 	if (mCurrentTexture == nullptr) {\
 		mCurrentTexture = &texture; \
 		mCurrentTexture->bind(); \
@@ -99,6 +100,8 @@ void main()
 	}
 
 	void OpenglRenderer2D::render() {
+		mShader->bind();
+		mVao->bind();
 		mVbo->update(0, mCurrentVerticesIndex * sizeof(Vertex), mVertices);
 		mEbo->update(0, mCurrentIndicesIndex * sizeof(unsigned int), mIndices);
 		glDrawElements(GL_TRIANGLES, mCurrentIndicesIndex, GL_UNSIGNED_INT, 0);
@@ -113,13 +116,19 @@ void main()
 		mBatchTimes++;
 	}
 	
-	void OpenglRenderer2D::beginBatch() {
+	void OpenglRenderer2D::beginBatch() {		
+		if (mFbo != nullptr)
+			mFbo->bind();
+		else 
+			mFbo->unbind();
+
 		glClear(GL_COLOR_BUFFER_BIT);	
 		glClearColor(mBackgroundColor.r, mBackgroundColor.g, mBackgroundColor.b, mBackgroundColor.a);	
-
 		mCurrentVerticesIndex = mCurrentIndicesIndex = 0;
 		mCurrentTexture = nullptr;
 
+		mShader->bind();
+		mVao->bind();
 		mShader->setMat4("projection", mProjection);
 		mShader->setMat4("view", mView);
 
@@ -127,8 +136,14 @@ void main()
 	}
 
 	void OpenglRenderer2D::endBatch() {
-		if (mCurrentIndicesIndex == 0 || mCurrentVerticesIndex == 0) return;
-		render();
+		if (!(mCurrentIndicesIndex == 0 || mCurrentVerticesIndex == 0)) {
+			render();
+		}
+		if (mFbo != nullptr) {
+			mFbo->unbind();
+			glClear(GL_COLOR_BUFFER_BIT);	
+			glClearColor(mBackgroundColor.r, mBackgroundColor.g, mBackgroundColor.b, mBackgroundColor.a);	
+		}
 	}
 
 	unsigned int OpenglRenderer2D::getBatchTimes() {
@@ -153,7 +168,6 @@ void main()
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x + size.x, pos.y + size.y), color, glm::vec2(1.0f, 1.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x, pos.y + size.y), color, glm::vec2(0.0f, 1.0f));	
 
-		RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(mDefaultTexture);
 	}
 
 
@@ -171,7 +185,6 @@ void main()
 		mVertices[mCurrentVerticesIndex++] = Vertex(b, color, glm::vec2(1.0f, 0.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(c, color, glm::vec2(0.5f, 0.5f));	
 
-		RENDERER2D_BATCH_DO_TEXTURE_NEED_REFRESH(mDefaultTexture);
 	}
 	
 	void OpenglRenderer2D::drawCircle(const glm::vec2 &pos, float radius, const glm::vec4 &color, int count) {
@@ -238,10 +251,10 @@ void main()
 		mBackgroundColor = color;	
 	}
 
-    void OpenglRenderer2D::setRenderToTexture(Texture2D &texture) {
-		OpenglTexture2D &openglTexture = dynamic_cast<OpenglTexture2D&>(texture);
-		if (mFbo != nullptr) {
-			mFbo = std::make_unique<OpenglFrameBuffer>(openglTexture);
+    void OpenglRenderer2D::setRenderToTexture(const std::unique_ptr<Texture2D> &texture) {
+		auto &openglTexture2D = dynamic_cast<OpenglTexture2D&>(*texture);
+		if (mFbo == nullptr) {
+			mFbo = std::make_unique<OpenglFrameBuffer>(openglTexture2D);
 		} else {
 			spdlog::warn("Already set a framebuffer!");
 		}

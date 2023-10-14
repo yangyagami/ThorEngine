@@ -1,12 +1,17 @@
 #include "OpenglFrameBuffer.h"
 #include "glad/glad.h"
+#include "spdlog/spdlog.h"
 
 namespace Thor {
     OpenglFrameBuffer::OpenglFrameBuffer(OpenglTexture2D &texture) {
         glGenFramebuffers(1, &mFbo);
         glBindFramebuffer(GL_FRAMEBUFFER, mFbo);
-        texture.bind();
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.getID(), 0);  
+        texture.unbind();
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.getID(), 0); 
+        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            spdlog::error("Create framebuffer failed!");
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
     
     void OpenglFrameBuffer::bind() {

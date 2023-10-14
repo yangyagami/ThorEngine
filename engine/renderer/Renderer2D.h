@@ -21,7 +21,7 @@ public:
 public:
 	virtual void setClearColor(const glm::vec4 &color) = 0;
 	virtual glm::vec4 getClearColor() = 0;
-	virtual void setRenderToTexture(Texture2D &texture) = 0;
+	virtual void setRenderToTexture(const std::unique_ptr<Texture2D> &texture) = 0;
 	virtual void setView(glm::mat4 &&view) = 0;
 	virtual void setProjection(glm::mat4 &&projection) = 0;
 	virtual void drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) = 0;

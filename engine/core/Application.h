@@ -11,6 +11,7 @@ class Application {
 private:
 	Window mWindow;
 	Keyboard mKeyboard;
+	glm::vec2 mViewSize;
 public:
 	Window &getWindow();
 public:
@@ -18,6 +19,7 @@ public:
 	~Application();
 	Keyboard &getKeyboard();
 	bool init();
+	void setViewSize(const glm::vec2 &size);
 	void process();
 	bool closeRequested();
 	glm::vec2 getViewSize();
