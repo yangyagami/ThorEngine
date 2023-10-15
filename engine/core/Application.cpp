@@ -12,7 +12,8 @@ namespace Thor {
 	}
 	
 	bool Application::init() {
-		return mWindow.init(1024, 768);	
+		mViewSize = glm::vec2(800.0f, 600.0f);
+		return mWindow.init(800, 600);	
 	}
 
     void Application::setViewSize(const glm::vec2 &size) {

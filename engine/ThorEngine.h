@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "GlobalContext.h"
 #include "entt/entt.hpp"
+#include "SceneManager.h"
 
 namespace Thor {
 	class Engine {
@@ -16,8 +17,8 @@ namespace Thor {
 		std::unique_ptr<Renderer2D> mRenderer;
 		Application mApp;
 		std::unique_ptr<Editor> mEditor;
-		Scene *mCurrentScene;
 		entt::registry mRegistry;
+		SceneManager mSceneManager;
 	private:
 		void update();
 		void render();
@@ -25,7 +26,6 @@ namespace Thor {
 		Engine(int argc, char *argv[]);
 		~Engine();
 		bool init();
-		void switchScene(Scene *scene);
 		int run();
 	};
 }

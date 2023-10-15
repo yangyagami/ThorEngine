@@ -252,11 +252,11 @@ void main()
 
     void OpenglRenderer2D::setRenderToTexture(const std::unique_ptr<Texture2D> &texture) {
 		auto &openglTexture2D = dynamic_cast<OpenglTexture2D&>(*texture);
-		if (mFbo == nullptr) {
-			mFbo = std::make_unique<OpenglFrameBuffer>(openglTexture2D);
-		} else {
-			spdlog::warn("Already set a framebuffer!");
+		if (mFbo != nullptr) {
+			spdlog::warn("Already set a framebuffer! Will be reset");
+			mFbo.reset();
 		}
+		mFbo = std::make_unique<OpenglFrameBuffer>(openglTexture2D);
     }
 
     glm::vec4 OpenglRenderer2D::getClearColor() {

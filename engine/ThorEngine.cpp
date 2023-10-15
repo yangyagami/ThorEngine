@@ -5,7 +5,7 @@
 #include "Texture2D.h"
 
 namespace Thor {
-	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mCurrentScene(nullptr), mRegistry() {
+	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mRegistry(), mSceneManager() {
 		spdlog::info("Engine created");
 	}
 
@@ -20,7 +20,7 @@ namespace Thor {
 			return false;
 		}
 
-		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp);
+		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp, mSceneManager);
 
 		mEditor = std::make_unique<Editor>();
 		mEditor->init();
@@ -29,24 +29,17 @@ namespace Thor {
 		return true;
 	}
 
-    void Engine::switchScene(Scene *scene) {
-		if (scene == nullptr) {
-			spdlog::error("Cannot switch null scene");
-			return;
-		}
-		scene->init();
-		mCurrentScene = scene;
-    }
-
     void Engine::update() {
 		glm::vec2 windowSize = mApp.getWindow().getSize();
 		mApp.setViewSize(windowSize);
 		// logic stuff	
-		if (mCurrentScene != nullptr) mCurrentScene->update();
+		auto currentScene = mSceneManager.getCurrentScene();
+		if (currentScene != nullptr) currentScene->update();
 	}
 	
 	void Engine::render() {
-		if (mCurrentScene != nullptr) mCurrentScene->render();
+		auto currentScene = mSceneManager.getCurrentScene();
+		if (currentScene != nullptr) currentScene->render();
 	}
 
 	int Engine::run() {

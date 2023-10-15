@@ -16,7 +16,7 @@ namespace Thor {
         for (auto entity : view) {
             auto &camera2D = view.get<Camera2DComponent>(entity);
             glm::mat4 view = glm::mat4(1.0f);
-            view = glm::translate(view, glm::vec3(camera2D.position.x, camera2D.position.y, 0.2f));
+            view = glm::translate(view, glm::vec3(camera2D.position.x, camera2D.position.y, 0.0f));
             glm::mat4 projection = glm::ortho(0.0f, app.getViewSize().x, app.getViewSize().y, 0.0f, -1.0f, 1.0f);
 
             renderer->setProjection(std::move(projection));
@@ -37,7 +37,7 @@ namespace Thor {
         for (auto entity : view) {
             auto &camera2D = view.get<Camera2DComponent>(entity);
             glm::mat4 view = glm::mat4(1.0f);
-            view = glm::translate(view, glm::vec3(camera2D.position.x, camera2D.position.y, 0.2f));
+            view = glm::translate(view, glm::vec3(camera2D.position.x, camera2D.position.y, 0.0f));
             glm::mat4 projection = glm::ortho(0.0f, app.getViewSize().x, app.getViewSize().y, 0.0f, -1.0f, 1.0f);
 
             renderer->setProjection(std::move(projection));

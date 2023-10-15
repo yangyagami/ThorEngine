@@ -1,15 +1,22 @@
 #include <algorithm>
 
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "Camera2D.h"
 #include "Editor.h"
+#include "Object.hpp"
+#include "SpriteComponent.hpp"
+#include "TransformComponent.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "GLFW/glfw3.h"
 #include "OpenglTexture2D.h"
 #include "GlobalContext.h"
+#include "Camera2DComponent.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Thor {
-    Editor::Editor() : mIO(nullptr), mSceneTexture(nullptr) {
+    Editor::Editor() : mIO(nullptr), mSceneTexture(nullptr), mDefaultScene(), mSelectedObj(nullptr) {
     	// Setup Dear ImGui context
     	IMGUI_CHECKVERSION();
     	ImGui::CreateContext();
@@ -31,7 +38,10 @@ namespace Thor {
 	bool Editor::init() {
 		auto &instance = GlobalContext::instance;
 		auto glfwWindow = instance->app.getWindow().getGLFWWindow();
+		auto &app = instance->app;
 		auto &renderer = instance->renderer2D;
+		auto &sceneManager = instance->sceneManager;
+		auto &registry = instance->registry;
     	// Setup Dear ImGui style
     	ImGui::StyleColorsDark();
     	//ImGui::StyleColorsLight();
@@ -40,31 +50,43 @@ namespace Thor {
     	ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
     	ImGui_ImplOpenGL3_Init("#version 460");
 
-
-		mSceneTexture = Texture2D::create(nullptr, 1024, 768, 3);
+		glm::vec2 viewSize = app.getViewSize();
+		mSceneTexture = Texture2D::create(nullptr, viewSize.x, viewSize.y, 3);
 		renderer->setRenderToTexture(mSceneTexture);
+
+		auto defaultCamera = new Camera2D();
+		defaultCamera->init();
+		auto testObj = new Object();
+		registry.emplace<SpriteComponent>(testObj->entity, "test.png");
+		registry.emplace<TransformComponent>(testObj->entity, glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
+		testObj->init();
+		mDefaultScene.addObject(defaultCamera);
+		mDefaultScene.addObject(testObj);
+		
+		sceneManager.switchScene(&mDefaultScene);
 		return true;
 	}
 	
 	void Editor::update() {
 		auto &instance = GlobalContext::instance;
 		auto &renderer = instance->renderer2D;
+		auto textureSize = mSceneTexture->getSize();
+		auto &app = instance->app;
+		if (app.getViewSize().x != textureSize.x && app.getViewSize().y != textureSize.y) { 
+			mSceneTexture.reset();
+			mSceneTexture = Texture2D::create(nullptr, app.getViewSize().x, app.getViewSize().y, 3);
+			renderer->setRenderToTexture(mSceneTexture);
+		}
 		renderer->setClearColor(glm::vec4(mBackgroundColor[0], mBackgroundColor[1], mBackgroundColor[2], mBackgroundColor[3]));
 	}
 	
 	void Editor::render() {
 		auto &instance = GlobalContext::instance;
-		auto &app = instance->app;
 		auto &renderer = instance->renderer2D;
 		//Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-		bool show_demo_window = true;
-
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
 
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
      	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -86,20 +108,19 @@ namespace Thor {
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
 
-			drawWindow("Objects", [](){
+			drawWindow("Objects", [&](){
 				ImGui::Button("new object");
 				ImGui::SeparatorText("");
-				const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO" };
-				static int item_current_idx = 0;
-				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
-				{
-					const bool is_selected = (item_current_idx == n);
-					if (ImGui::Selectable(items[n], is_selected))
-						item_current_idx = n;
-
-					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-					if (is_selected)
+				auto currentSceneObjects = mDefaultScene.getObjects();
+				static std::string selected = "";
+				for (auto &&[name, obj] : currentSceneObjects) {
+					bool isSelected = false;
+					if (selected == name) isSelected = true;
+					if (ImGui::Selectable(name.c_str(), isSelected)) {
+						selected = name;
+						mSelectedObj = obj;
 						ImGui::SetItemDefaultFocus();
+					}
 				}
 			});
 
@@ -109,9 +130,6 @@ namespace Thor {
 				// we access the ImGui window size
 				const float windowWidth = ImGui::GetContentRegionAvail().x;
 				const float windowHeight = ImGui::GetContentRegionAvail().y;
-
-				app.setViewSize(glm::vec2(windowWidth, windowHeight));
-				glViewport(0, 0, windowWidth, windowHeight);
 
 				// we get the screen position of the window
 				ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -123,11 +141,17 @@ namespace Thor {
 					ImVec2(0, 1), 
 					ImVec2(1, 0)
         		);
-    
+
+				mGizmo2D.render();
 			});
 
 			drawWindow("Components", [&](){
-				ImGui::ColorPicker4("background", &mBackgroundColor[0]);
+				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
+				if (mSelectedObj != nullptr) {
+					drawCamera2DComponent(mSelectedObj);
+					drawTransformComponent(mSelectedObj);
+				}
 			});
 		
 			drawWindow("DebugInfo", [&](){
@@ -139,6 +163,7 @@ namespace Thor {
         ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+
 	}
 
 	void Editor::drawWindow(const std::string &windowName, std::function<void()> callback, ImGuiWindowFlags flags) {
@@ -146,6 +171,34 @@ namespace Thor {
 		callback();
 		ImGui::End();
     }
+
+    void Editor::drawCamera2DComponent(Object *object) {
+		auto &registry = GlobalContext::instance->registry;
+		auto view = registry.view<Camera2DComponent>();
+		for (auto entity : view) {
+			if (entity == object->entity) {
+				auto &cameraComponent = view.get<Camera2DComponent>(object->entity);
+				ImGui::Begin("Camera2D");
+				ImGui::InputFloat2("position", glm::value_ptr(cameraComponent.position));
+				ImGui::InputFloat("rotation", &cameraComponent.rotation);
+				ImGui::End();
+			}
+		}
+    }
+
+	void Editor::drawTransformComponent(Object *object) {
+		auto &registry = GlobalContext::instance->registry;
+		auto view = registry.view<TransformComponent>();
+		for (auto entity : view) {
+			if (entity == object->entity) {
+				auto &transformComponent = view.get<TransformComponent>(object->entity);
+				ImGui::Begin("Transform");
+				ImGui::InputFloat2("position", glm::value_ptr(transformComponent.position));
+				ImGui::InputFloat2("scale", glm::value_ptr(transformComponent.scale));
+				ImGui::End();
+			}
+		}
+	}
 
 }
 

@@ -13,8 +13,5 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
-	TestScene testScene;
-	engine.switchScene(&testScene);
-
 	return engine.run();
 }

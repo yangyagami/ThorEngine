@@ -19,10 +19,6 @@ TestScene::TestScene() {
 	addObject(&player);
 }
 
-void TestScene::init() {
-    Scene::init();
-}
-
 void TestScene::update() {
 	Scene::update();
 }

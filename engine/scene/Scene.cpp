@@ -8,21 +8,24 @@ namespace Thor {
     }
 
     void Scene::removeObject(const std::string &name) {
-		mObjects.erase(name);
+		for (auto &&[name, obj] : mObjects) {
+			mObjects.erase(name);
+			delete obj;
+		}
+    }
+
+    std::map<std::string, Object *> &Scene::getObjects() {
+		return mObjects;
     }
 
     Scene::Scene() {
     }
 
     Scene::~Scene() {
-	
-	}
-
-    void Scene::init() {
 		for (auto &&[name, obj] : mObjects) {
-			obj->init();
+			delete obj;
 		}
-    }
+	}
 
     void Scene::update() {
 		for (auto &&[name, obj] : mObjects) {
