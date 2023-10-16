@@ -13,6 +13,7 @@
 #include "OpenglTexture2D.h"
 #include "GlobalContext.h"
 #include "Camera2DComponent.hpp"
+#include "AnchorComponent.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
 namespace Thor {
@@ -59,6 +60,7 @@ namespace Thor {
 		auto testObj = new Object();
 		registry.emplace<SpriteComponent>(testObj->entity, "test.png");
 		registry.emplace<TransformComponent>(testObj->entity, glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
+		registry.emplace<AnchorComponent>(testObj->entity, glm::vec2(0.5f, 0.5f));
 		testObj->init();
 		mDefaultScene.addObject(defaultCamera);
 		mDefaultScene.addObject(testObj);

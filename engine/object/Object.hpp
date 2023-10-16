@@ -1,6 +1,7 @@
 #ifndef THOR_OBJECT_H
 #define THOR_OBJECT_H
 
+#include "AnchorComponent.hpp"
 #include "SpriteComponent.hpp"
 #include "TransformComponent.hpp"
 #include "entt/entt.hpp"
@@ -27,7 +28,14 @@ public:
 		auto &renderer = globalContext->renderer2D;
 		auto viewSprite = registry.view<SpriteComponent>();
 		auto viewTransform = registry.view<TransformComponent>();
+		auto viewAnchor = registry.view<AnchorComponent>();
 		glm::vec2 pos(0.0f, 0.0f);
+		glm::vec2 anchor(0.0f, 0.0f);
+    	for(auto [e, anchorComponent]: viewAnchor.each()) {
+			if (entity == e) {
+				anchor = anchorComponent.point;
+			}
+    	}	
     	for(auto [e, transformComponent]: viewTransform.each()) {
 			if (entity == e) {
 				pos = transformComponent.position;
@@ -35,7 +43,8 @@ public:
     	}	
     	for(auto [e, spriteComponent]: viewSprite.each()) {
 			if (entity == e) {
-				renderer->drawTexture(spriteComponent.texture2D, pos);
+				auto size = spriteComponent.texture2D->getSize();
+				renderer->drawTexture(spriteComponent.texture2D, glm::vec2(pos.x - size.x * anchor.x, pos.y - size.y * anchor.y));
 			}
     	}	
 	}
