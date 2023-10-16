@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "sol/sol.hpp"
 #include "Application.h"
 #include "Renderer2D.h"
 #include "Editor.h"
@@ -19,6 +20,9 @@ namespace Thor {
 		std::unique_ptr<Editor> mEditor;
 		entt::registry mRegistry;
 		SceneManager mSceneManager;
+		sol::state mLuaState;
+	private:
+		void initLuaState();
 	private:
 		void update();
 		void render();

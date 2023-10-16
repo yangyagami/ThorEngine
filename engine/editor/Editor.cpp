@@ -4,7 +4,7 @@
 #include "Camera2D.h"
 #include "Editor.h"
 #include "Object.hpp"
-#include "SpriteComponent.hpp"
+#include "Texture2DComponent.hpp"
 #include "TransformComponent.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -55,15 +55,13 @@ namespace Thor {
 		mSceneTexture = Texture2D::create(nullptr, viewSize.x, viewSize.y, 3);
 		renderer->setRenderToTexture(mSceneTexture);
 
-		auto defaultCamera = new Camera2D();
+		auto defaultCamera = mDefaultScene.addObject<Camera2D>("defaultCamera");
 		defaultCamera->init();
-		auto testObj = new Object();
-		registry.emplace<SpriteComponent>(testObj->entity, "test.png");
+		auto testObj = mDefaultScene.addObject("test");
+		registry.emplace<Texture2DComponent>(testObj->entity, "test.png");
 		registry.emplace<TransformComponent>(testObj->entity, glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
 		registry.emplace<AnchorComponent>(testObj->entity, glm::vec2(0.5f, 0.5f));
 		testObj->init();
-		mDefaultScene.addObject(defaultCamera);
-		mDefaultScene.addObject(testObj);
 		
 		sceneManager.switchScene(&mDefaultScene);
 		return true;
@@ -115,11 +113,11 @@ namespace Thor {
 				ImGui::SeparatorText("");
 				auto currentSceneObjects = mDefaultScene.getObjects();
 				static std::string selected = "";
-				for (auto &&[name, obj] : currentSceneObjects) {
+				for (auto obj : currentSceneObjects) {
 					bool isSelected = false;
-					if (selected == name) isSelected = true;
-					if (ImGui::Selectable(name.c_str(), isSelected)) {
-						selected = name;
+					if (selected == obj->name) isSelected = true;
+					if (ImGui::Selectable(obj->name.c_str(), isSelected)) {
+						selected = obj->name;
 						mSelectedObj = obj;
 						ImGui::SetItemDefaultFocus();
 					}

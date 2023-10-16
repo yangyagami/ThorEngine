@@ -5,8 +5,11 @@
 #include "Texture2D.h"
 
 namespace Thor {
-	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mRegistry(), mSceneManager() {
+	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mRegistry(), mSceneManager(), mLuaState() {
 		spdlog::info("Engine created");
+	}
+
+	void Engine::initLuaState() {
 	}
 
 	bool Engine::init() {
@@ -20,10 +23,10 @@ namespace Thor {
 			return false;
 		}
 
-		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp, mSceneManager);
+		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp, mSceneManager, mLuaState);
 
-		mEditor = std::make_unique<Editor>();
-		mEditor->init();
+		//mEditor = std::make_unique<Editor>();
+		//mEditor->init();
 
 		spdlog::info("Engine init success.");
 		return true;
@@ -46,13 +49,13 @@ namespace Thor {
 		spdlog::info("Engine running...");
 		while (!mApp.closeRequested()) {
 			update();
-			mEditor->update();
+			//mEditor->update();
 
 			mRenderer->beginBatch();
 			render();
 			mRenderer->endBatch();
 
-			mEditor->render();
+			//mEditor->render();
 
 			mApp.process();
 		}

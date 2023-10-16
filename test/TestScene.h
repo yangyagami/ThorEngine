@@ -7,6 +7,7 @@
 class TestScene : public Thor::Scene {
 public:
 	TestScene();
+	void init() override;
 	void update() override;
 	void render() override;
 };
