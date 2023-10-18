@@ -1,4 +1,5 @@
 #include "ThorEngine.h"
+#include "GlobalContext.h"
 #include "spdlog/spdlog.h"
 #include "glad/glad.h"
 #include "Renderer2D.h"
@@ -10,6 +11,13 @@ namespace Thor {
 	}
 
 	void Engine::initLuaState() {
+		//auto &registry = GlobalContext::instance->registry;
+
+		mLuaState.open_libraries(sol::lib::base);
+
+		// Set entt registry
+		//mLuaState["registry"] = mLuaState.create_table_with("emplace", [&](entt::entity e, const std::string &componentName){
+		});
 	}
 
 	bool Engine::init() {
@@ -27,6 +35,8 @@ namespace Thor {
 
 		//mEditor = std::make_unique<Editor>();
 		//mEditor->init();
+
+		initLuaState();
 
 		spdlog::info("Engine init success.");
 		return true;

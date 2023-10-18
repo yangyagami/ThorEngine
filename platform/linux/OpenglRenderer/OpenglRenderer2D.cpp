@@ -1,6 +1,7 @@
 #include "OpenglRenderer2D.h"
 #include "spdlog/spdlog.h"
 #include "glad/glad.h"
+#include <iomanip>
 
 #define RENDERER2D_BATCH_DO_NEED_REFRESH { \
 	if (mCurrentVerticesIndex >= RENDERER2D_MAX_VERTEX || mCurrentIndicesIndex >= RENDERER2D_MAX_INDICES) { \
@@ -95,6 +96,8 @@ void main()
 
 		mProjection = glm::mat4(1.0f);
 		mView = glm::mat4(1.0f);
+
+		setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 		return true;	
 	}
 

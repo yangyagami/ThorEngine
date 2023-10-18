@@ -38,10 +38,10 @@ public:
 					spdlog::error("Cannot open {}!", scriptComponent.scriptPath);
 					return;
 				}
-				luaState.create_named_table(name);
+				luaState[name] = luaState.create_table_with("entity", entity);
 				loadResult();
 				auto initFunc = luaState[name]["init"];
-				initFunc();
+				initFunc(luaState[name]);
 			}
 		}
 	}
@@ -55,7 +55,7 @@ public:
 		for (auto [e, scriptComponent] : viewScript.each()) {
 			if (entity == e) {
 				auto updateFunc = luaState[name]["update"];
-				updateFunc();
+				updateFunc(luaState[name]);
 			}
 		}
 	}
