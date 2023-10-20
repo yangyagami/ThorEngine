@@ -17,7 +17,7 @@ namespace Thor {
 
 		// Set entt registry
 		//mLuaState["registry"] = mLuaState.create_table_with("emplace", [&](entt::entity e, const std::string &componentName){
-		});
+		//});
 	}
 
 	bool Engine::init() {
