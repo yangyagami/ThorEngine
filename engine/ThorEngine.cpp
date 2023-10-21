@@ -6,7 +6,7 @@
 #include "Texture2D.h"
 
 namespace Thor {
-	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr), mRegistry(), mSceneManager(), mLuaState() {
+	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr) {
 		spdlog::info("Engine created");
 	}
 
@@ -31,7 +31,7 @@ namespace Thor {
 			return false;
 		}
 
-		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mRegistry, mApp, mSceneManager, mLuaState);
+		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mApp, mSceneManager, mLuaState);
 
 		//mEditor = std::make_unique<Editor>();
 		//mEditor->init();

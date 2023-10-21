@@ -12,12 +12,11 @@
 #include "GLFW/glfw3.h"
 #include "OpenglTexture2D.h"
 #include "GlobalContext.h"
-#include "Camera2DComponent.hpp"
 #include "AnchorComponent.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
 namespace Thor {
-    Editor::Editor() : mIO(nullptr), mSceneTexture(nullptr), mDefaultScene(), mSelectedObj(nullptr) {
+    Editor::Editor() : mIO(nullptr), mSceneTexture(nullptr), mSelectedObj(nullptr) {
     	// Setup Dear ImGui context
     	IMGUI_CHECKVERSION();
     	ImGui::CreateContext();
@@ -41,8 +40,6 @@ namespace Thor {
 		auto glfwWindow = instance->app.getWindow().getGLFWWindow();
 		auto &app = instance->app;
 		auto &renderer = instance->renderer2D;
-		auto &sceneManager = instance->sceneManager;
-		auto &registry = instance->registry;
     	// Setup Dear ImGui style
     	ImGui::StyleColorsDark();
     	//ImGui::StyleColorsLight();
@@ -55,15 +52,7 @@ namespace Thor {
 		mSceneTexture = Texture2D::create(nullptr, viewSize.x, viewSize.y, 3);
 		renderer->setRenderToTexture(mSceneTexture);
 
-		auto defaultCamera = mDefaultScene.addObject<Camera2D>("defaultCamera");
-		defaultCamera->init();
-		auto testObj = mDefaultScene.addObject("test");
-		registry.emplace<Texture2DComponent>(testObj->entity, "test.png");
-		registry.emplace<TransformComponent>(testObj->entity, glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
-		registry.emplace<AnchorComponent>(testObj->entity, glm::vec2(0.5f, 0.5f));
-		testObj->init();
 		
-		sceneManager.switchScene(&mDefaultScene);
 		return true;
 	}
 	
@@ -109,19 +98,6 @@ namespace Thor {
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
 
 			drawWindow("Objects", [&](){
-				ImGui::Button("new object");
-				ImGui::SeparatorText("");
-				auto currentSceneObjects = mDefaultScene.getObjects();
-				static std::string selected = "";
-				for (auto obj : currentSceneObjects) {
-					bool isSelected = false;
-					if (selected == obj->name) isSelected = true;
-					if (ImGui::Selectable(obj->name.c_str(), isSelected)) {
-						selected = obj->name;
-						mSelectedObj = obj;
-						ImGui::SetItemDefaultFocus();
-					}
-				}
 			});
 
 			drawWindow("Files", [](){});
@@ -142,7 +118,6 @@ namespace Thor {
 					ImVec2(1, 0)
         		);
 
-				mGizmo2D.render();
 			});
 
 			drawWindow("Components", [&](){
@@ -173,31 +148,9 @@ namespace Thor {
     }
 
     void Editor::drawCamera2DComponent(Object *object) {
-		auto &registry = GlobalContext::instance->registry;
-		auto view = registry.view<Camera2DComponent>();
-		for (auto entity : view) {
-			if (entity == object->entity) {
-				auto &cameraComponent = view.get<Camera2DComponent>(object->entity);
-				ImGui::Begin("Camera2D");
-				ImGui::InputFloat2("position", glm::value_ptr(cameraComponent.position));
-				ImGui::InputFloat("rotation", &cameraComponent.rotation);
-				ImGui::End();
-			}
-		}
     }
 
 	void Editor::drawTransformComponent(Object *object) {
-		auto &registry = GlobalContext::instance->registry;
-		auto view = registry.view<TransformComponent>();
-		for (auto entity : view) {
-			if (entity == object->entity) {
-				auto &transformComponent = view.get<TransformComponent>(object->entity);
-				ImGui::Begin("Transform");
-				ImGui::InputFloat2("position", glm::value_ptr(transformComponent.position));
-				ImGui::InputFloat2("scale", glm::value_ptr(transformComponent.scale));
-				ImGui::End();
-			}
-		}
 	}
 
 }

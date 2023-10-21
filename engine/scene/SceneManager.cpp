@@ -1,9 +1,8 @@
 #include "SceneManager.h"
 #include "spdlog/spdlog.h"
-#include "Scene.h"
 
 namespace Thor {
-    void SceneManager::switchScene(Scene *scene) {
+    void SceneManager::switchScene(Object *scene) {
         if (scene == nullptr) {
             spdlog::warn("Target scene is null!");
         }
@@ -11,7 +10,7 @@ namespace Thor {
 		mCurrentScene->init();
     }
 
-    Scene *SceneManager::getCurrentScene() {
+    Object *SceneManager::getCurrentScene() {
         return mCurrentScene;
     }
 

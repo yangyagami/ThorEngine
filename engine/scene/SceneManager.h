@@ -1,16 +1,16 @@
 #ifndef THOR_SCENE_MANAGER_H
 #define THOR_SCENE_MANAGER_H
 
-namespace Thor {
+#include "Object.hpp"
 
-class Scene;
+namespace Thor {
 
 class SceneManager {
 private:
-    Scene *mCurrentScene;
+    Object *mCurrentScene;
 public:
-    void switchScene(Scene *scene);
-    Scene *getCurrentScene();
+    void switchScene(Object *scene);
+    Object *getCurrentScene();
     SceneManager();
 };
 }

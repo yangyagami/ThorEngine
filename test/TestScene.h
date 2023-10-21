@@ -1,15 +1,17 @@
 #ifndef TEST_SCENE_H
 #define TEST_SCENE_H
 
-#include "Scene.h"
-#include "GlobalContext.h"
+#include "Object2D.hpp"
+#include "Sprite2D.hpp"
 
-class TestScene : public Thor::Scene {
+class TestScene : public Thor::Object2D {
+private:
+	Thor::Sprite2D *mTestSprite;
 public:
-	TestScene();
-	void init() override;
-	void update() override;
-	void render() override;
+	TestScene(const std::string &name);
+	virtual void init() override;
+	virtual void update() override;
+	virtual void render() override;
 };
 
 #endif

@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
-	TestScene testScene;
+	TestScene testScene("TestScene");
 	auto &sceneManager = Thor::GlobalContext::instance->sceneManager;
 	sceneManager.switchScene(&testScene);
 

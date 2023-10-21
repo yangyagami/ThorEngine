@@ -2,6 +2,7 @@
 #define THOR_GIZMO_2D_H
 
 #include "Object.hpp"
+#include "glm/glm.hpp"
 
 namespace Thor {
 

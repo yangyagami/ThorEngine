@@ -7,9 +7,7 @@
 #include "Application.h"
 #include "Renderer2D.h"
 #include "Editor.h"
-#include "Scene.h"
 #include "GlobalContext.h"
-#include "entt/entt.hpp"
 #include "SceneManager.h"
 
 namespace Thor {
@@ -18,7 +16,6 @@ namespace Thor {
 		std::unique_ptr<Renderer2D> mRenderer;
 		Application mApp;
 		std::unique_ptr<Editor> mEditor;
-		entt::registry mRegistry;
 		SceneManager mSceneManager;
 		sol::state mLuaState;
 	private:
