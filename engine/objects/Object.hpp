@@ -20,6 +20,15 @@ public:
 		return mParent;
 	}
 
+	Object *getRoot() {
+		Object *root = mParent;
+		while (root != nullptr) {
+			root = root->mParent;
+		}
+
+		return root;
+	}
+
 	void addChild(Object *child) {
 		child->mParent = this;
 		mChildren.push_back(child);
