@@ -7,10 +7,6 @@
 
 namespace Thor {
     void Camera2D::init() {
-		auto &app = GlobalContext::instance->app;
-		auto &renderer2D = GlobalContext::instance->renderer2D;
-		auto viewsize = app.getViewSize();
-		renderer2D->setProjection(glm::ortho(0.0f, viewsize.x, viewsize.y, 0.0f, -1.0f, 1.0f));
     }
 
     void Camera2D::update() {

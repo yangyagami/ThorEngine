@@ -1,23 +1,20 @@
 #include <iostream>
 
-#include "GlobalContext.h"
 #include "ThorEngine.h"
-#include "spdlog/spdlog.h"
-#include "TestScene.h"
-#include "Camera2D.h"
-#include "sol/sol.hpp"
+#include "LinuxOS.h"
 
-int main(int argc, char *argv[]) {
-	Thor::Engine engine(argc, argv);
+int main(int argc, char **argv) {
+    Thor::LinuxOS os;
+    os.init(); 
 
-	if (engine.init() == false) {
-		spdlog::error("Engine init failed!");
-		return -1;
-	}
+    Thor::Engine engine(&os, argc, argv);
+    engine.init();
 
-	TestScene testScene("TestScene");
-	auto &sceneManager = Thor::GlobalContext::instance->sceneManager;
-	sceneManager.switchScene(&testScene);
+    while (!os.appClosedRequested()) {
+        engine.run();
 
-	return engine.run();
+        os.process();
+    }
+
+	return 0;
 }

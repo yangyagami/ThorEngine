@@ -5,19 +5,19 @@
 
 #include "sol/sol.hpp"
 #include "Renderer2D.h"
-#include "Application.h"
 #include "SceneManager.h"
 
 namespace Thor {
 
 struct GlobalContext {
-	static std::unique_ptr<GlobalContext> instance;
+public:
 	std::unique_ptr<Renderer2D> &renderer2D;
-	Application &app;
 	SceneManager &sceneManager;
 	sol::state &luaState;
 
-	GlobalContext(std::unique_ptr<Renderer2D> &renderer2D, Application &app, SceneManager &sceneManager, sol::state &state); 
+	static std::unique_ptr<GlobalContext> singleton;
+
+	GlobalContext(std::unique_ptr<Renderer2D> &renderer2D, SceneManager &sceneManager, sol::state &state); 
 	~GlobalContext(); 
 };
 

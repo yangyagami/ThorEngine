@@ -28,6 +28,8 @@ public:
 	virtual void drawTriangle(const glm::vec2 &a, const glm::vec2 &b, const glm::vec2 &c, const glm::vec4 &color) = 0;
 	virtual void drawCircle(const glm::vec2 &pos, float radius, const glm::vec4 &color, int count = 80) = 0;
 	virtual void drawTexture(const std::unique_ptr<Texture2D> &texture, const glm::vec2 &pos) = 0;
+public:
+    virtual ~Renderer2D();
 };
 
 }

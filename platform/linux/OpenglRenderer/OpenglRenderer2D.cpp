@@ -1,7 +1,6 @@
 #include "OpenglRenderer2D.h"
 #include "spdlog/spdlog.h"
 #include "glad/glad.h"
-#include <iomanip>
 
 #define RENDERER2D_BATCH_DO_NEED_REFRESH { \
 	if (mCurrentVerticesIndex >= RENDERER2D_MAX_VERTEX || mCurrentIndicesIndex >= RENDERER2D_MAX_INDICES) { \

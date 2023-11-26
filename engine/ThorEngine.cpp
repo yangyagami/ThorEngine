@@ -6,7 +6,7 @@
 #include "Texture2D.h"
 
 namespace Thor {
-	Engine::Engine(int argc, char *argv[]) : mApp(argc, argv), mEditor(nullptr) {
+	Engine::Engine(OS *os, int argc, char *argv[]) : mOS(os) {
 		spdlog::info("Engine created");
 	}
 
@@ -21,20 +21,13 @@ namespace Thor {
 	}
 
 	bool Engine::init() {
-		if (mApp.init() == false) {
-			spdlog::error("Cannot init application!");
-			return false;
-		}	
-		mRenderer = Renderer2D::create();
-		if (mRenderer->init() == false) {
+		mRenderer2D = Renderer2D::create();
+		if (mRenderer2D->init() == false) {
 			spdlog::error("Cannot init renderer!");
 			return false;
 		}
 
-		GlobalContext::instance = std::make_unique<GlobalContext>(mRenderer, mApp, mSceneManager, mLuaState);
-
-		//mEditor = std::make_unique<Editor>();
-		//mEditor->init();
+		GlobalContext::singleton = std::make_unique<GlobalContext>(mRenderer2D, mSceneManager, mLuaState);
 
 		initLuaState();
 
@@ -43,8 +36,8 @@ namespace Thor {
 	}
 
     void Engine::update() {
-		glm::vec2 windowSize = mApp.getWindow().getSize();
-		mApp.setViewSize(windowSize);
+		//glm::vec2 windowSize = mApp.getWindow().getSize();
+		//mApp.setViewSize(windowSize);
 		// logic stuff	
 		auto currentScene = mSceneManager.getCurrentScene();
 		if (currentScene != nullptr) currentScene->update();
@@ -55,21 +48,12 @@ namespace Thor {
 		if (currentScene != nullptr) currentScene->render();
 	}
 
-	int Engine::run() {
-		spdlog::info("Engine running...");
-		while (!mApp.closeRequested()) {
-			update();
-			//mEditor->update();
+	void Engine::run() {
+		update();
 
-			mRenderer->beginBatch();
-			render();
-			mRenderer->endBatch();
-
-			//mEditor->render();
-
-			mApp.process();
-		}
-		return 0;
+		mRenderer2D->beginBatch();
+		render();
+		mRenderer2D->endBatch();
 	}
 
 	Engine::~Engine() {
