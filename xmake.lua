@@ -1,3 +1,7 @@
+set_project("ThorEngine")
+
+set_languages("c++17")
+
 add_requires("glfw", "spdlog", "glm", "sol2", "entt")
 
 add_rules("mode.debug", "mode.release", "mode.check")
