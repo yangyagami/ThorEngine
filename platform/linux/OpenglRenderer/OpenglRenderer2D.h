@@ -62,7 +62,9 @@ public:
 	void setClearColor(const glm::vec4 &color) override;
 	void setRenderToTexture(const std::unique_ptr<Texture2D> &texture) override;
 	void setView(glm::mat4 &&view) override;
+	void setView(glm::mat4 &view) override;
 	void setProjection(glm::mat4 &&projection) override;
+	void setProjection(glm::mat4 &projection) override;
 	void drawRectangle(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) override;
 	void drawTriangle(const glm::vec2 &a, const glm::vec2 &b, const glm::vec2 &c, const glm::vec4 &color) override;
 	void drawCircle(const glm::vec2 &pos, float radius, const glm::vec4 &color, int count = 80) override;

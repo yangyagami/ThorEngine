@@ -3,23 +3,33 @@
 
 #include <memory>
 
+#include "OS.h"
+#include "entt/entt.hpp"
 #include "sol/sol.hpp"
 #include "Renderer2D.h"
 #include "SceneManager.h"
 
 namespace Thor {
 
-struct GlobalContext {
-public:
-	std::unique_ptr<Renderer2D> &renderer2D;
-	SceneManager &sceneManager;
-	sol::state &luaState;
-
-	static std::unique_ptr<GlobalContext> singleton;
-
-	GlobalContext(std::unique_ptr<Renderer2D> &renderer2D, SceneManager &sceneManager, sol::state &state); 
-	~GlobalContext(); 
-};
+    struct GlobalContext {
+    public:
+    	std::unique_ptr<Renderer2D> &renderer2D;
+    	SceneManager &sceneManager;
+    	sol::state &luaState;
+        entt::registry &registry;
+        OS *os;
+    
+    	static std::unique_ptr<GlobalContext> singleton;
+    
+    	GlobalContext(
+            OS *os,
+            std::unique_ptr<Renderer2D> &renderer2D, 
+            SceneManager &sceneManager, 
+            sol::state &state, 
+            entt::registry &registry
+        ); 
+    	~GlobalContext(); 
+    };
 
 }
 

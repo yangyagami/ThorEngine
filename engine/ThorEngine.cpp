@@ -4,6 +4,7 @@
 #include "glad/glad.h"
 #include "Renderer2D.h"
 #include "Texture2D.h"
+#include "Scene.h"
 
 namespace Thor {
 	Engine::Engine(OS *os, int argc, char *argv[]) : mOS(os) {
@@ -20,6 +21,9 @@ namespace Thor {
 		//});
 	}
 
+    void Engine::initECS() {
+    }
+
 	bool Engine::init() {
 		mRenderer2D = Renderer2D::create();
 		if (mRenderer2D->init() == false) {
@@ -27,7 +31,13 @@ namespace Thor {
 			return false;
 		}
 
-		GlobalContext::singleton = std::make_unique<GlobalContext>(mRenderer2D, mSceneManager, mLuaState);
+		GlobalContext::singleton = std::make_unique<GlobalContext>(
+            mOS,
+            mRenderer2D,
+            mSceneManager, 
+            mLuaState, 
+            mEnttRegistry
+        );
 
 		initLuaState();
 

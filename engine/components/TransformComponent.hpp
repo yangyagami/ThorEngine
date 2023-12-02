@@ -4,13 +4,13 @@
 #include "glm/glm.hpp"
 
 namespace Thor {
-struct TransformComponent {
-    glm::vec2 position;
-    glm::vec2 scale;
-
-    TransformComponent() = default;
-    TransformComponent(const glm::vec2 &pos, const glm::vec2 &scale) : position(pos), scale(scale) {}
-};
+    struct TransformComponent {
+        glm::vec2 position;
+        glm::vec2 scale;
+    
+        TransformComponent() = default;
+        TransformComponent(const glm::vec2 &pos, const glm::vec2 &scale) : position(pos), scale(scale) {}
+    };
 }
 
 #endif

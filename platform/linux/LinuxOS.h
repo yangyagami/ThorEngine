@@ -13,6 +13,7 @@ namespace Thor {
         virtual void process() override;
         virtual bool init() override;
         virtual bool appClosedRequested() override;
+        virtual glm::vec2 getViewSize() override;
     };
 }
 

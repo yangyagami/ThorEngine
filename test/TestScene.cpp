@@ -1,33 +1,48 @@
 #include "TestScene.h"
-#include "Camera2D.h"
-#include "Keyboard.h"
-#include "Object2D.hpp"
-#include "Sprite2D.hpp"
-#include "spdlog/spdlog.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
+#include "Camera2DComponent.hpp"
 #include "GlobalContext.h"
+#include "SceneManager.h"
+#include "Texture2DComponent.hpp"
+#include "TransformComponent.hpp"
+#include "entt/entt.hpp"
+#include <memory>
 
-TestScene::TestScene(const std::string &name) : Thor::Object2D(name) {
-	mTestSprite = new Thor::Sprite2D("testSprite");
-	addChild(mTestSprite);
-	addChild(new Thor::Camera2D("camera"));
+__attribute__((visibility("default")))
+void GameInit() {
+    auto testScene = std::make_shared<TestScene>("TestScene");
+    auto &sceneManager = Thor::GlobalContext::singleton->sceneManager;
+    testScene->init();
+    sceneManager.switchScene(testScene);
 }
 
 void TestScene::init() {
-	Thor::Object2D::init();
+    Thor::Scene::init();
+
+    auto rect = createEntity();
+    auto &registry = Thor::GlobalContext::singleton->registry;
+    registry.emplace<Thor::TransformComponent>(rect, Thor::TransformComponent());
+    registry.emplace<Thor::Camera2DComponent>(rect, Thor::Camera2DComponent());
+
+    mCamera2DSystem.init(rect);
 }
 
 void TestScene::update() {
-	Thor::Object2D::update();
-	auto &app = Thor::GlobalContext::instance->app;
-
-	if (app.getKeyboard().isKeyPressed(GLFW_KEY_D)) {
-		mTestSprite->transform.position.x += 0.5f;	
-	}
+    Thor::Scene::update();
 }
 
 void TestScene::render() {
-	Thor::Object2D::render();
+    Thor::Scene::render();
+
+    auto &registry = Thor::GlobalContext::singleton->registry;
+    auto &renderer2D = Thor::GlobalContext::singleton->renderer2D;
+
+    for (auto &e : getEntities()) {
+        auto transformComponent = registry.get<Thor::TransformComponent>(e);
+        renderer2D->drawRectangle(
+            transformComponent.position,
+            glm::vec2(30.0f, 30.0f),
+            glm::vec4(0.0f, 0.7f, 1.0f, 1.0f)
+        );
+    }
 }
 

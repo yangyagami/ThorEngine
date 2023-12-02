@@ -17,7 +17,7 @@ target("ThorEngine")
 		"engine/scene",
 		"engine/components",
 		"engine/input",
-		"engine/objects",
+		--"engine/objects",
 		"engine/os",
 		"platform/linux/GLFWwindow",
 		"platform/linux/OpenglRenderer",
@@ -35,7 +35,7 @@ target("ThorEngine")
 		"engine/renderer/*.cpp",
 		"engine/scene/*.cpp",
 		"engine/input/*.cpp",
-		"engine/objects/*.cpp",
+		--"engine/objects/*.cpp",
 		"platform/linux/GLFWwindow/*.cpp",
 		"platform/linux/OpenglRenderer/*.cpp",
 		"platform/linux/*.cpp",
@@ -49,7 +49,7 @@ target("ThorTest")
 	set_kind("binary")
 
 	add_files(
-		"test/main.cpp"
+		"test/*.cpp"
 	)
 
     add_deps("ThorEngine")

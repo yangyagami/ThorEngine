@@ -26,4 +26,8 @@ namespace Thor {
         mWindow.pollEvents();
     }
 
+    glm::vec2 LinuxOS::getViewSize() {
+        return mWindow.getSize();
+    }
+
 }

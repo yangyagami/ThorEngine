@@ -4,12 +4,12 @@
 #include "glm/glm.hpp"
 
 namespace Thor {
-struct AnchorComponent {
-    glm::vec2 point;
-
-    AnchorComponent() = default;
-    AnchorComponent(const glm::vec2 &p) : point(p) {}
-};
+    struct AnchorComponent {
+        glm::vec2 point;
+    
+        AnchorComponent() = default;
+        AnchorComponent(const glm::vec2 &p) : point(p) {}
+    };
 }
 
 #endif

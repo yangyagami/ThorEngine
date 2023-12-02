@@ -1,16 +1,17 @@
 #include "SceneManager.h"
+#include "Scene.h"
 #include "spdlog/spdlog.h"
 
 namespace Thor {
-    void SceneManager::switchScene(Object *scene) {
+    void SceneManager::switchScene(std::shared_ptr<Scene> scene) {
         if (scene == nullptr) {
             spdlog::warn("Target scene is null!");
         }
         mCurrentScene = scene;
-		mCurrentScene->init();
+		//mCurrentScene->init();
     }
 
-    Object *SceneManager::getCurrentScene() {
+    std::shared_ptr<Scene> SceneManager::getCurrentScene() {
         return mCurrentScene;
     }
 

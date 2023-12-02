@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "glm/glm.hpp"
+
 namespace Thor {
     class OS {
     public:
@@ -10,6 +12,7 @@ namespace Thor {
         virtual void process() = 0;
         virtual bool init() = 0;
         virtual bool appClosedRequested() = 0;
+        virtual glm::vec2 getViewSize() = 0;
     };
 }
 

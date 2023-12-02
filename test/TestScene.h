@@ -1,17 +1,18 @@
 #ifndef TEST_SCENE_H
 #define TEST_SCENE_H
 
-#include "Object2D.hpp"
-#include "Sprite2D.hpp"
+#include "Scene.h"
+#include "systems/Camera2DSystem.hpp"
 
-class TestScene : public Thor::Object2D {
+class TestScene : public Thor::Scene {
 private:
-	Thor::Sprite2D *mTestSprite;
+    Thor::Camera2DSystem mCamera2DSystem;
 public:
-	TestScene(const std::string &name);
-	virtual void init() override;
-	virtual void update() override;
-	virtual void render() override;
+    using Thor::Scene::Scene;
+
+    virtual void init();
+    virtual void update();
+    virtual void render();
 };
 
 #endif

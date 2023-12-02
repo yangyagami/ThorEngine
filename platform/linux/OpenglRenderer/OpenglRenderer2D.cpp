@@ -120,8 +120,6 @@ void main()
 	void OpenglRenderer2D::beginBatch() {		
 		if (mFbo != nullptr)
 			mFbo->bind();
-		else 
-			mFbo->unbind();
 
 		glClear(GL_COLOR_BUFFER_BIT);	
 		glClearColor(mBackgroundColor.r, mBackgroundColor.g, mBackgroundColor.b, mBackgroundColor.a);	
@@ -245,7 +243,6 @@ void main()
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x + size.x, pos.y), color, glm::vec2(1.0f, 0.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x + size.x, pos.y + size.y), color, glm::vec2(1.0f, 1.0f));	
 		mVertices[mCurrentVerticesIndex++] = Vertex(glm::vec2(pos.x, pos.y + size.y), color, glm::vec2(0.0f, 1.0f));	
-
 	}
 
 	void OpenglRenderer2D::setClearColor(const glm::vec4 &color) {
@@ -270,6 +267,14 @@ void main()
 	}
 
 	void OpenglRenderer2D::setProjection(glm::mat4 &&projection) {
+		mProjection = projection;	
+	}
+
+	void OpenglRenderer2D::setView(glm::mat4 &view) {
+		mView = view;	
+	}
+
+	void OpenglRenderer2D::setProjection(glm::mat4 &projection) {
 		mProjection = projection;	
 	}
 
