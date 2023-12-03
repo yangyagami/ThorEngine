@@ -13,6 +13,9 @@
 
 namespace Thor {
 	Engine::Engine(OS *os, int argc, char *argv[]) : mOS(os) {
+#ifdef _DEBUG
+        spdlog::set_level(spdlog::level::trace);
+#endif
 		spdlog::info("Engine created");
 	}
 

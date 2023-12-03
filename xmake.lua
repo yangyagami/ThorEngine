@@ -11,7 +11,6 @@ if is_mode("debug") then
     add_defines("_DEBUG")
 end
 
-
 target("ThorEngine")
 	set_kind("shared")
 
