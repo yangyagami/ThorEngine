@@ -7,8 +7,14 @@ add_requires("glfw", "spdlog", "glm", "sol2", "entt")
 add_rules("mode.debug", "mode.release", "mode.check")
 add_cxflags("-Wall", "-Werror")
 
+if is_mode("debug") then
+    add_defines("_DEBUG")
+end
+
 target("ThorEngine")
 	set_kind("shared")
+
+    set_pcxxheader("engine/PreHeader.h")
 
 	add_includedirs(
 		"engine", 

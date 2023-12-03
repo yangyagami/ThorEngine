@@ -8,10 +8,10 @@
 #include "Texture2DComponent.hpp"
 #include "TransformComponent.hpp"
 #include "entt/entt.hpp"
-#include "spdlog/spdlog.h"
 
 __attribute__((visibility("default")))
 void GameInit() {
+    Thor::GlobalContext::singleton->maxFrameLimit = 60.0f;
     auto testScene = std::make_shared<TestScene>("TestScene");
     auto &sceneManager = Thor::GlobalContext::singleton->sceneManager;
     testScene->init();
@@ -33,12 +33,17 @@ void TestScene::update() {
     Thor::Scene::update();
 
     auto dt = Thor::GlobalContext::singleton->frameDelta;
-
+    auto viewSize = Thor::GlobalContext::singleton->os->getViewSize();
     auto &registry = Thor::GlobalContext::singleton->registry;
+
     for (auto &e : getEntities()) {
         auto &transformComponent = registry.get<Thor::TransformComponent>(e);
         transformComponent.position.x += 100 * dt;
+        if (transformComponent.position.x >= viewSize.x) {
+            transformComponent.position.x = 0.0f;
+        }
     }
+    SPDLOG_DEBUG("fps: {}", 1.0f / dt);
 }
 
 void TestScene::render() {
@@ -54,6 +59,6 @@ void TestScene::render() {
             glm::vec2(30.0f, 30.0f),
             glm::vec4(0.0f, 0.7f, 1.0f, 1.0f)
         );
-    }
+     }
 }
 

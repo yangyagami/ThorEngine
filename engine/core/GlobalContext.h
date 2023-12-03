@@ -19,6 +19,7 @@ namespace Thor {
         entt::registry &registry;
         OS *os;
         double frameDelta;
+        double maxFrameLimit;
     
     	static std::unique_ptr<GlobalContext> singleton;
     

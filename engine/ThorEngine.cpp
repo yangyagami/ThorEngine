@@ -80,10 +80,11 @@ namespace Thor {
         diffTime = endTime - startTime;
 
         if (fabs(diffTime) < 0.0001f) diffTime = 0.0001f;
-        if (diffTime < 1.0f / 60.0f) {
-            auto diffTimeForSleep = 1.0f / 60.0f - diffTime;
+        auto maxFrameLimit = GlobalContext::singleton->maxFrameLimit;
+        if (diffTime < 1.0f / maxFrameLimit) {
+            auto diffTimeForSleep = 1.0f / maxFrameLimit - diffTime;
             sleep(diffTimeForSleep);
-            diffTime = 1.0f / 60.0f;
+            diffTime = 1.0f / maxFrameLimit;
         }
 
         GlobalContext::singleton->frameDelta = diffTime;

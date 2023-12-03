@@ -4,8 +4,6 @@
 
 #define RENDERER2D_BATCH_DO_NEED_REFRESH { \
 	if (mCurrentVerticesIndex >= RENDERER2D_MAX_VERTEX || mCurrentIndicesIndex >= RENDERER2D_MAX_INDICES) { \
-		mCurrentVerticesIndex = 0; \
-		mCurrentIndicesIndex = 0; \
 		fflush(); \
 	} \
 }

@@ -14,7 +14,8 @@ namespace Thor {
         sceneManager(sceneManager),
         luaState(state),
         registry(registry),
-        os(os) {
+        os(os),
+        maxFrameLimit(60.0f) {
     }
 
 	GlobalContext::~GlobalContext() {
