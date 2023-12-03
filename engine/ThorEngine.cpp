@@ -5,6 +5,10 @@
 #include "Renderer2D.h"
 #include "Texture2D.h"
 #include "Scene.h"
+#include <chrono>
+#include <ratio>
+#include <thread>
+#include <unistd.h>
 
 namespace Thor {
 	Engine::Engine(OS *os, int argc, char *argv[]) : mOS(os) {
@@ -59,11 +63,30 @@ namespace Thor {
 	}
 
 	void Engine::run() {
+        static double startTime = 0.0f;
+        static double endTime = 0.0f;
+        static double diffTime = 0.0f;
+
+        startTime = mOS->getCurrentTime();
+
 		update();
 
 		mRenderer2D->beginBatch();
 		render();
 		mRenderer2D->endBatch();
+
+        endTime = mOS->getCurrentTime();
+
+        diffTime = endTime - startTime;
+
+        if (fabs(diffTime) < 0.0001f) diffTime = 0.0001f;
+        if (diffTime < 1.0f / 60.0f) {
+            auto diffTimeForSleep = 1.0f / 60.0f - diffTime;
+            sleep(diffTimeForSleep);
+            diffTime = 1.0f / 60.0f;
+        }
+
+        GlobalContext::singleton->frameDelta = diffTime;
 	}
 
 	Engine::~Engine() {

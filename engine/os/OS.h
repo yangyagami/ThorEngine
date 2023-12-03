@@ -13,6 +13,7 @@ namespace Thor {
         virtual bool init() = 0;
         virtual bool appClosedRequested() = 0;
         virtual glm::vec2 getViewSize() = 0;
+        virtual double getCurrentTime() = 0;
     };
 }
 

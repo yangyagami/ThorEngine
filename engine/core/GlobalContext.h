@@ -18,6 +18,7 @@ namespace Thor {
     	sol::state &luaState;
         entt::registry &registry;
         OS *os;
+        double frameDelta;
     
     	static std::unique_ptr<GlobalContext> singleton;
     

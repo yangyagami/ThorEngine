@@ -1,3 +1,6 @@
+#include <memory>
+#include <tuple>
+
 #include "TestScene.h"
 #include "Camera2DComponent.hpp"
 #include "GlobalContext.h"
@@ -5,7 +8,7 @@
 #include "Texture2DComponent.hpp"
 #include "TransformComponent.hpp"
 #include "entt/entt.hpp"
-#include <memory>
+#include "spdlog/spdlog.h"
 
 __attribute__((visibility("default")))
 void GameInit() {
@@ -28,6 +31,14 @@ void TestScene::init() {
 
 void TestScene::update() {
     Thor::Scene::update();
+
+    auto dt = Thor::GlobalContext::singleton->frameDelta;
+
+    auto &registry = Thor::GlobalContext::singleton->registry;
+    for (auto &e : getEntities()) {
+        auto &transformComponent = registry.get<Thor::TransformComponent>(e);
+        transformComponent.position.x += 100 * dt;
+    }
 }
 
 void TestScene::render() {

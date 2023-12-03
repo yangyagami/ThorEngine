@@ -14,6 +14,7 @@ namespace Thor {
         virtual bool init() override;
         virtual bool appClosedRequested() override;
         virtual glm::vec2 getViewSize() override;
+        virtual double getCurrentTime() override;
     };
 }
 

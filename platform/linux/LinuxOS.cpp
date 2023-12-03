@@ -1,4 +1,5 @@
 #include "LinuxOS.h"
+#include "GLFW/glfw3.h"
 #include "spdlog/spdlog.h"
 
 namespace Thor {
@@ -28,6 +29,10 @@ namespace Thor {
 
     glm::vec2 LinuxOS::getViewSize() {
         return mWindow.getSize();
+    }
+
+    double LinuxOS::getCurrentTime() {
+        return glfwGetTime();
     }
 
 }
