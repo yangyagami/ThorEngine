@@ -1,6 +1,6 @@
 #include "OpenglFrameBuffer.h"
 #include "glad/glad.h"
-#include "spdlog/spdlog.h"
+#include "pch.h"
 
 namespace Thor {
     OpenglFrameBuffer::OpenglFrameBuffer(OpenglTexture2D &texture) {

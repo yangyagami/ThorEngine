@@ -1,14 +1,15 @@
-#include "ThorEngine.h"
-#include "GlobalContext.h"
-#include "spdlog/spdlog.h"
-#include "glad/glad.h"
-#include "Renderer2D.h"
-#include "Texture2D.h"
-#include "Scene.h"
 #include <chrono>
 #include <ratio>
 #include <thread>
 #include <unistd.h>
+
+#include "ThorEngine.h"
+#include "GlobalContext.h"
+#include "pch.h"
+#include "glad/glad.h"
+#include "Renderer2D.h"
+#include "Texture2D.h"
+#include "Scene.h"
 
 namespace Thor {
 	Engine::Engine(OS *os, int argc, char *argv[]) : mOS(os) {

@@ -11,10 +11,11 @@ if is_mode("debug") then
     add_defines("_DEBUG")
 end
 
+
 target("ThorEngine")
 	set_kind("shared")
 
-    set_pcxxheader("engine/PreHeader.h")
+    set_pcxxheader("engine/pch.h")
 
 	add_includedirs(
 		"engine", 
@@ -53,6 +54,8 @@ target("ThorEngine")
 
 target("ThorTest")
 	set_kind("binary")
+
+    set_pcxxheader("engine/pch.h")
 
 	add_files(
 		"test/*.cpp"

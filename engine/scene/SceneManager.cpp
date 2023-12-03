@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 #include "Scene.h"
-#include "spdlog/spdlog.h"
+#include "pch.h"
 
 namespace Thor {
     void SceneManager::switchScene(std::shared_ptr<Scene> scene) {

@@ -8,6 +8,7 @@
 #include "Texture2DComponent.hpp"
 #include "TransformComponent.hpp"
 #include "entt/entt.hpp"
+#include "pch.h"
 
 __attribute__((visibility("default")))
 void GameInit() {

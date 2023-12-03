@@ -1,6 +1,6 @@
 #include "glad/glad.h"
 #include "OpenglShader.h"
-#include "spdlog/spdlog.h"
+#include "pch.h"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Thor {

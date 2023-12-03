@@ -9,7 +9,7 @@
 #include "Texture2DComponent.hpp"
 #include "TransformComponent.hpp"
 #include "entt/entity/fwd.hpp"
-#include "spdlog/spdlog.h"
+#include "pch.h"
 #include "entt/entt.hpp"
 
 namespace Thor {
